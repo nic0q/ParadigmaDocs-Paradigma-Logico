@@ -64,7 +64,7 @@ getUserNames([],[]).
 getUserNames([H|T],[H1|T1]):-
   getUser(H,H1),
   getUserNames(T,T1).
-
+  
 % Registrado Antes
 
 registradoAntes(ParadigmaDocs,User):-
@@ -73,22 +73,60 @@ registradoAntes(ParadigmaDocs,User):-
   member(User,Usernames).
 % [User,Pass,Fecha]
 
-aniadirUsuario(Sn1,ListaUsuario,Sn2):-
+paradigmaDocsRegister(Sn1,Fecha,Username,Password,Sn2):-
+  \+registradoAntes(Sn1,Username),
+  isDate(Fecha),
   getNombrePDocs(Sn1,Nombre),
   getFechaCreacionPdocs(Sn1,FechaCreacion),
   getLogeados(Sn1,Logeados),
   getDocumentos(Sn1,Docs),
   getRegistrados(Sn1,Registrados),
-  append(Registrados,[ListaUsuario],ListaActualizada),
-  constPdocs(Nombre,FechaCreacion,ListaActualizada,Logeados,Docs,Sn2).
+  append(Registrados,[Username,Password,Fecha],UpdateRegistrados), % El problema del |... es por el append, quiza sea una buena idea cambiar por aniadir al final
+  constPdocs(Nombre,FechaCreacion,UpdateRegistrados,Logeados,Docs,Sn2).
 
-constUsuario(Username,Password,Date,[Username,Password,Date]).
+paradigmaDocsLogin(Sn1,Username,Sn2):-
+  registradoAntes(Sn1,Username),
+  getNombrePDocs(Sn1,Nombre),
+  getFechaCreacionPdocs(Sn1,FechaCreacion),
+  getRegistrados(Sn1,Registrados),
+  getLogeados(Sn1,Logeados),
+  % Hacer predicado para que busque la contraseña coincide contraseña
+  getDocumentos(Sn1,Docs),
+  append(Logeados,[Username],UpdateLogeados), 
+  constPdocs(Nombre,FechaCreacion,Registrados,UpdateLogeados,Docs,Sn2).
 
-paradigmaDocsRegister(Sn1,Fecha,Username,Password,Sn2):-
-  \+registradoAntes(Sn1,Username),
-  isDate(Fecha),
-  constUsuario(Username,Password,Fecha,ListaUsuario),
-  aniadirUsuario(Sn1,ListaUsuario,Sn2).
+logeado(Sn1,User):-
+  getLogeados(Sn1,Logeados),
+  member(User,Logeados).
 
-% paradigmaDocsLogin(Sn1,Username,Password,Sn2):-
-  
+% ESte predicado se usara en todas las funciones para comprobar que el usuario tenga sesion activa
+crearDocumento(Fecha, Nombre, Contenido, Id, [Id, Fecha, Nombre, Contenido]).
+
+getId(Sn1,Id):-
+  getDocumentos(Sn1,Docs),
+  length(Docs,Idd),
+  Id is Idd + 1.
+% Predicado que elimina la sesion activa de un usuario
+deslogear(Sn1,Sn2):-
+  getNombrePDocs(Sn1,Nombre),
+  getFechaCreacionPdocs(Sn1,FechaCreacion),
+  getRegistrados(Sn1,Registrados),
+  getDocumentos(Sn1,Docs),
+  constPdocs(Nombre,FechaCreacion,Registrados,[],Docs,Sn2).
+
+  %  Agregar al para saver si se arreglar las palabras esas
+insertarAlFinal( Elemento, [], [Elemento] ).
+insertarAlFinal( Elemento, [Cabeza|Resto], [Cabeza|Lista] ) :-
+        insertarAlFinal( Elemento, Resto, Lista ).
+         
+paradigmaDocsCreate(Sn1, Fecha, Nombre, Contenido, Sn2):-
+  logeado(Sn1,Nombre),
+  getNombrePDocs(Sn1,NombrePdocs),
+  getFechaCreacionPdocs(Sn1,FechaCreacion),
+  getRegistrados(Sn1,Registrados),
+  getDocumentos(Sn1,Docs),
+  getId(Sn1,Id),
+  crearDocumento(Fecha, Nombre, Contenido, Id, Doc),
+  append(Docs,[Doc],UpdateDocs),
+  constPdocs(NombrePdocs,FechaCreacion,Registrados,[],UpdateDocs,Sn2).
+
