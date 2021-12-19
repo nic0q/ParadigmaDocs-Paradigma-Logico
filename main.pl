@@ -137,11 +137,17 @@ getDocsAcceso(User,Docs,Exit):-
   getSharedDocuments(User,Docs,Exit1),
   filterList([], Exit1, Exit).
 
-revokeAccesses(Doc,[Id,Autor,Titulo,[[Autor,["W","C","R"]]],Historial]):-
+getIdDocCreados([],[]).
+getIdDocCreados([Doc|TailDoc],[H1|T1]):-
+  getIdDoc(Doc,H1),
+  getIdDocCreados(TailDoc,T1).
+  
+revokeAccesses(Doc,UpdateDoc):-
   getIdDoc(Doc,Id),
   getAutorDoc(Doc,Autor),
   getTituloDoc(Doc,Titulo),
-  getHistorialDoc(Doc,Historial).
+  getHistorialDoc(Doc,Historial),
+  UpdateDoc = [Id,Autor,Titulo,[[Autor,["W","C","R","S"]]],Historial].
 
 % Obtiene los documentos por ID y además les revoca el acceso
 revokeAllAccesses(_,[],[]):-!.
@@ -155,8 +161,8 @@ revokeAllAccesses(Sn1,[H|T],[H1|T1]):-
 
 getRestantesLista(Restantes,[],Restantes):-!.
 getRestantesLista(Documentos,[H|T],X):-
-getRestantes(H,Documentos,Actualizada),
-getRestantesLista(Actualizada,T,X).
+  getRestantes(H,Documentos,Actualizada),
+  getRestantesLista(Actualizada,T,X).
 
 %  -------------------------------------------TDA VERSION---------------------------------------------------
 constVersion(Idvr,Fecha,Contenido,NuevaVersion):-
@@ -184,12 +190,16 @@ aniadirActiveVersion(Historial, Version, NuevoHistorial):-
   append([Version],[NotActive],NuevoHistorial).
 
 deleteLast(String,Charac,StringDelet):-
-  sub_string(String,0,_,Charac,StringDelet).
+  sub_string(String,0,_,Charac,StringDelet),!.
+
+deleteLast(String,Charac,""):-
+  string_length(String,Len),
+  Len < Charac,!.
 %  -------------------------------------------TDA ACCESS---------------------------------------------------
 % TODOS LOS ACCESOS SOLO DEBEN SER DE LA FORMA "R", "W", "C"
 % Los accessos solo pueden ser "W", "R" o "C"
 isAccess(Access):-
-  myMember(Access,["W","R","C"]).
+  myMember(Access,["W","R","C","S"]).
 
 isAccessList([]):-!.
 isAccessList([H|T]):-
@@ -199,6 +209,10 @@ isAccessList([H|T]):-
 isEditor(Usuario,Accesses):-
   getPermisos(Usuario,Accesses,PermisosUsuario),
   myMember("W",PermisosUsuario).
+
+isShareAdmin(Usuario,Accesses):-
+  getPermisos(Usuario,Accesses,PermisosUsuario),
+  myMember("S",PermisosUsuario).
 
 % Predicado que crea los accessos del documento,  otorgando a cada usuario los
 createAccesses(_,_,[],[]):-!.   % Base Case 1
@@ -231,6 +245,7 @@ filtraAccesses([User|TailUser],Accesses,X):-
 permisoString("W","Escritura").
 permisoString("R","Lectura").
 permisoString("C","Comentarios").
+permisoString("S","Compartir").
 
 %  -------------------------------------------OTROS PREDICADOS / HECHOS---------------------------------------------------
 % AddHead:
@@ -249,10 +264,10 @@ myMember(E,[E|_]):-!.
 myMember(E,[_|T]):-
   myMember(E,T).
 
-are_identical(X, Y) :-
+equal(X, Y) :-
     X == Y.
 filterList(A, In, Out) :-
-    exclude(are_identical(A), In, Out).
+    exclude(equal(A), In, Out).
 
 % ****************** TO STRING ************************
 dateString(Date,DateString):-
@@ -306,6 +321,10 @@ historialToString([Version|RestoVer],[H1|T1]):-
   historialToString(RestoVer,T1).
 
 %  -------------------------------------------MAIN---------------------------------------------------
+% Predicados:
+% Metas Secundarias: registradoAntes, 
+% ParadigmaDocsRegister:
+% Dominio: Sn1, Fecha, Username, Password, Sn2
 % Metas Principales: Register, Login, Share, Add, RestoreVersion, Search
 paradigmaDocsRegister(Sn1,Fecha,Username,Password,Sn2):-
   string(Username),
@@ -318,7 +337,8 @@ paradigmaDocsRegister(Sn1,Fecha,Username,Password,Sn2):-
   getRegistrados(Sn1,Registrados),
   append(Registrados,[[Username,Password,Fecha]],UpdateRegistrados),
   Sn2 = [Nombre,FechaCreacion,UpdateRegistrados,Logeados,Docs].
-
+% ParadigmaDocsLogin
+% Dominio: Sn1, Fecha, Username, Password, Sn2
 paradigmaDocsLogin(Sn1,Username,Password,Sn2):-
   \+sesionActiva(Sn1),
   string(Username),
@@ -331,7 +351,8 @@ paradigmaDocsLogin(Sn1,Username,Password,Sn2):-
   miembroPdocs(Sn1,Username,Password),
   append(Logeados,[Username],UpdateLogeados),
   Sn2 = [Nombre,FechaCreacion,Registrados,UpdateLogeados,Docs]. % Retorna paradigmaDocs con la lista de logeados actualizada
-
+% ParadigmaDocsCreate
+% Dominio: Sn1, Fecha, Nombre, Contenido, Sn2
 paradigmaDocsCreate(Sn1, Fecha, Nombre, Contenido,Sn2):-
   string(Nombre),
   string(Contenido),
@@ -340,23 +361,24 @@ paradigmaDocsCreate(Sn1, Fecha, Nombre, Contenido,Sn2):-
   getLogeado(Sn1,Autor),
   setId(Sn1,Id),
   constVersion(-1,Fecha,Contenido,Version),
-  constDoc(Id,Autor,Nombre,[[Autor,["W","C","R"]]],[Version],Doc), % al autor del documento automaticamente se le añade un permiso con todos los accesos
+  constDoc(Id,Autor,Nombre,[[Autor,["W","C","R","S"]]],[Version],Doc), % al autor del documento automaticamente se le añade un permiso con todos los accesos
   append(Docs,Doc,UpdateDocs),
   modificarDocs(Sn1,UpdateDocs,Sn2).
-
+% ParadigmaDocsShare
+% Dominio: Sn1, DocumentId, ListaPermisos, ListaUsernames Permitidos, Sn2
 paradigmaDocsShare(Sn1,DocumentId,ListaPermisos,ListaUsernamesPermitidos,Sn2):-
   sesionActiva(Sn1),
+  ListaPermisos \== [],
   getNombrePdocs(Sn1,NombrePdocs),
   getFechaCreacionPdocs(Sn1,FechaCreacion),
   getRegistrados(Sn1,Registrados),
   getDocumentos(Sn1,Docs),
-  getLogeado(Sn1,Logeado),
   getDocumentById(Sn1,DocumentId,Doc),
   getAutorDoc(Doc,Autor),
   getTituloDoc(Doc,TituloDoc),
   getAccessesDoc(Doc,OldAcceses),
   getHistorialDoc(Doc,Historial),
-  Autor == Logeado,
+  isShareAdmin(Autor,OldAcceses),
   filtraAccesses(ListaUsernamesPermitidos,OldAcceses,FilteredAccesses),
   createAccesses(Sn1,ListaPermisos,ListaUsernamesPermitidos,Accesses),
   append(FilteredAccesses,Accesses,NewAccesses),
@@ -364,7 +386,8 @@ paradigmaDocsShare(Sn1,DocumentId,ListaPermisos,ListaUsernamesPermitidos,Sn2):-
   getRestantes(DocumentId,Docs,Restantes),
   append(Restantes,NuevoDoc,UpdateDocs),
   Sn2 = [NombrePdocs,FechaCreacion,Registrados,[],UpdateDocs].
-
+% ParadigmaDocsAdd
+% Dominio: Sn1, DocumentId, Date, ContenidoTexto, Sn2
 paradigmaDocsAdd(Sn1,DocumentId,Date,ContenidoTexto,Sn2):-
   string(ContenidoTexto),
   sesionActiva(Sn1),
@@ -392,6 +415,8 @@ paradigmaDocsAdd(Sn1,DocumentId,Date,ContenidoTexto,Sn2):-
   append(RestantesDoc,NuevoDoc,UpdateDocs),
   modificarDocs(Sn1,UpdateDocs,Sn2).
 
+% ParadigmaDocRestoreVersion
+% Dominio: Sn1, DocumentId, IdVersion, Sn2
 paradigmaDocsRestoreVersion(Sn1,DocumentId,IdVersion,Sn2):-
   sesionActiva(Sn1),
   getLogeado(Sn1,Logeado),
@@ -412,8 +437,8 @@ paradigmaDocsRestoreVersion(Sn1,DocumentId,IdVersion,Sn2):-
   append(RestantesDoc,NuevoDoc,UpdateDocs),
   modificarDocs(Sn1,UpdateDocs,Sn2).
 
-
-
+% ParadigmaDocsToString
+% Dominio: Sn1, DocumentId, Date, ContenidoTexto, Sn2
 paradigmaDocsToString(Sn1,PdocsUsrString):-
   sesionActiva(Sn1),
   getLogeado(Sn1,Logeado),
@@ -424,7 +449,7 @@ paradigmaDocsToString(Sn1,PdocsUsrString):-
   docsToString(DocsCreados,DocStringCreados),atomics_to_string(DocStringCreados,DocStrings1),
   docsToString(DocsAcceso,DocStringAcceso),atomics_to_string(DocStringAcceso,DocStrings2),
   atomics_to_string(["\n* * * * * * * * *  ",Logeado,"  * * * * * * * * *  \n\n*********** Es Propietario de ***********",
-  DocStrings1,"\n************ Tiene acceso a *************\n",DocStrings2],PdocsUsrString).
+  DocStrings1,"\n************ Tiene acceso a *************\n",DocStrings2],PdocsUsrString),!.
 
 paradigmaDocsToString(Sn1,PDocsString):-
   \+sesionActiva(Sn1),
@@ -440,16 +465,31 @@ paradigmaDocsToString(Sn1,PDocsString):-
   atomics_to_string(["\n* * * * * * * ",Nombre," * * * * * * *","\n",
   "Creado el ",DateString,"\n\n",
   "******** Usuarios Registrados ******** ",RegiString,"\n",
-  "************* Documentos ************ ",DocStrings],PDocsString).
+  "************* Documentos ************ ",DocStrings],PDocsString),!.
 
+% ParadigmaDocsRevokeAllAccesses
+% Dominio: Sn1, DocumentIds Sn2
 paradigmaDocsRevokeAllAccesses(Sn1,DocumentIds,Sn2):-
+  DocumentIds \= [],
   sesionActiva(Sn1),
   getDocumentos(Sn1,Docs),
   revokeAllAccesses(Sn1,DocumentIds,RevokedDocuments),
   getRestantesLista(Docs,DocumentIds,RestantesDoc),
   append(RestantesDoc,RevokedDocuments,UpdateDocs),
-  modificarDocs(Sn1,UpdateDocs,Sn2).
+  modificarDocs(Sn1,UpdateDocs,Sn2),!.
+paradigmaDocsRevokeAllAccesses(Sn1,_,Sn2):-
+  sesionActiva(Sn1),
+  getLogeado(Sn1,Logeado),
+  getDocumentos(Sn1,Docs),
+  getDocsCreados(Logeado,Docs,DocsCreados),
+  getIdDocCreados(DocsCreados,DocumentIds),
+  revokeAllAccesses(Sn1,DocumentIds,RevokedDocuments),
+  getRestantesLista(Docs,DocumentIds,RestantesDoc),
+  append(RestantesDoc,RevokedDocuments,UpdateDocs),
+  modificarDocs(Sn1,UpdateDocs,Sn2),!.
 
+% ParadigmaDocsDelete
+% Dominio: Sn1, DocumentId, Date, NumberOfCharacters, Sn2
 paradigmaDocsDelete(Sn1,DocumentId,Date,NumberOfCharacters,Sn2):-
   integer(NumberOfCharacters),
   sesionActiva(Sn1),
@@ -473,15 +513,6 @@ paradigmaDocsDelete(Sn1,DocumentId,Date,NumberOfCharacters,Sn2):-
   getRestantes(DocumentId,Docs,RestantesDoc),
   append(RestantesDoc,NuevoDoc,UpdateDocs),
   modificarDocs(Sn1,UpdateDocs,Sn2).
-
-
-
-
-
-% deleteLast(String,Charac,StringDelet):-
-%   string_length(String,Len),
-%   Len < Charac,
-%   sub_string(String,0,0,Len,StringDelet).
 
 % EJEMPLOS:
 % ------------------------------------------------------------------------------- Register -----------------------------------------------------------------------------------------
@@ -528,8 +559,6 @@ paradigmaDocsDelete(Sn1,DocumentId,Date,NumberOfCharacters,Sn2):-
 % date(20, 12, 2020, D1), date(21, 12, 2021, D2), paradigmaDocs("Google docs", D1, PD1), paradigmaDocsRegister(PD1, D2, "chuck", "qwerty", PD2), paradigmaDocsRegister(PD2,D2,"saul","1234",PD3), paradigmaDocsRegister(PD3,D1,"kim","4321",PD4), paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D2,"Titulochuck","Contenidochuck",PD6), paradigmaDocsLogin(PD6,"saul","1234",PD7), paradigmaDocsCreate(PD7,D1,"saulDoc","saulContent",PD8), paradigmaDocsLogin(PD8,"kim","4321",PD9), paradigmaDocsCreate(PD9,D1,"kimDoc","kimContent",PD10), paradigmaDocsLogin(PD10,"kim","4321",PD11), paradigmaDocsShare(PD11,2,["W","C"],["chuck","saul"],PD12),paradigmaDocsLogin(PD12,"chuck","qwerty",PD13), paradigmaDocsAdd(PD13,2,D1,"blabla",PD14),paradigmaDocsLogin(PD14,"kim","4321",PD15), paradigmaDocsCreate(PD15,D1,"KIMDOC2","KimCOntent2",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsShare(PD17,3,["W","C"],["chuck","saul"],PD18),
 % [["kim", ["W", "C", "R"]], ["chuck", ["W", "C"]], ["saul", ["W", "C"]]
 % ----------------------------------------------------------------------------- Restore Version -----------------------------------------------------------------------------------------
-
 % ----------------------------------------------------------------------------- Revoke All Accesses --------------------------------------------------------------------------------------------------
-% date(20, 12, 2020, D1), date(21, 12, 2021, D2), paradigmaDocs("Google docs", D1, PD1), paradigmaDocsRegister(PD1, D2, "chuck", "qwerty", PD2), paradigmaDocsRegister(PD2,D2,"saul","1234",PD3), paradigmaDocsRegister(PD3,D1,"kim","4321",PD4), paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D2,"Titulochuck","Contenidochuck",PD6), paradigmaDocsLogin(PD6,"saul","1234",PD7), paradigmaDocsCreate(PD7,D1,"saulDoc","saulContent",PD8), paradigmaDocsLogin(PD8,"kim","4321",PD9), paradigmaDocsCreate(PD9,D1,"kimDoc","kimContent",PD10), paradigmaDocsLogin(PD10,"kim","4321",PD11), paradigmaDocsShare(PD11,2,["W","C"],["chuck","saul"],PD12),paradigmaDocsLogin(PD12,"chuck","qwerty",PD13), paradigmaDocsAdd(PD13,2,D1,"blabla",PD14),paradigmaDocsLogin(PD14,"kim","4321",PD15), paradigmaDocsCreate(PD15,D1,"KIMDOC2","KimCOntent2",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsShare(PD17,3,["W","C"],["chuck","saul"],PD18),paradigmaDocsLogin(PD18,"kim","4321",PD19),paradigmaDocsRevokeAllAccesses(PD19,[3,2],PD20).
-
+% date(20, 12, 2020, D1),date(21, 12, 2021, D2), date(21, 12, 2021, D3),paradigmaDocs("Google docs", D1, PD1), paradigmaDocsRegister(PD1, D2, "chuck", "qwerty", PD2), paradigmaDocsRegister(PD2,D2,"saul","1234",PD3), paradigmaDocsRegister(PD3,D1,"kim","4321",PD4), paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D2,"Titulochuck","Contenidochuck",PD6), paradigmaDocsLogin(PD6,"saul","1234",PD7), paradigmaDocsCreate(PD7,D1,"saulDoc","saulContent",PD8), paradigmaDocsLogin(PD8,"kim","4321",PD9), paradigmaDocsCreate(PD9,D1,"kimDoc","kimContent",PD10), paradigmaDocsLogin(PD10,"kim","4321",PD11), paradigmaDocsShare(PD11,2,["W","C"],["chuck","saul"],PD12),paradigmaDocsLogin(PD12,"chuck","qwerty",PD13), paradigmaDocsAdd(PD13,2,D3,"blabla",PD14),paradigmaDocsLogin(PD14,"kim","4321",PD15), paradigmaDocsCreate(PD15,D1,"KIMDOC2","KimCOntent2",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsShare(PD17,3,["W","C"],["chuck","saul"],PD18),paradigmaDocsLogin(PD18,"kim","4321",PD19),paradigmaDocsRevokeAllAccesses(PD19,[3,2],PD20).
 
