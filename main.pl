@@ -404,11 +404,6 @@ isShareAdmin(Usuario,Accesses):-
   getPermisos(Usuario,Accesses,PermisosUsuario),
   myMember("S",PermisosUsuario).
 
-% isViewer: Predicado que determina si un usuario tiene el permiso de leer un documento
-isReader(Usuario,Accesses):-
-  getPermisos(Usuario,Access,PermisosUsuario),
-  myMember("R",PermisosUsuario).
-
 % getPermisos: Predicado que obtiene los permisos ["W"] de un usuario
 getUserPermiso([Nombre,_],Nombre).
 getTipoPermiso([_,Permiso],Permiso).
