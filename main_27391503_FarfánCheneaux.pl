@@ -22,56 +22,60 @@
 
 -------------------------------------------TDA DATE--------------------------------------------------
 Dominios:
-    Cantidad_dias, DD, MM, YYYY: Entero
+    Cantidad_dias, DD, MM, YYYY:      Entero
 
 Predicados:
-  mes (MM, Cantidad_dias)     aridad: 2
-  date(DD,MM,YYYY)            aridad: 3
-  getDay([DD,MM,YYYY],DD)     aridad: 2
-  getMonth([DD,MM,YYYY],MM)   aridad: 2
-  getYear([DD,MM,YYYY],YYYY)  aridad: 2
+    mes (MM, Cantidad_dias)           aridad: 2
+    date(DD,MM,YYYY)                  aridad: 3
+    getDay([DD,MM,YYYY],DD)           aridad: 2
+    getMonth([DD,MM,YYYY],MM)         aridad: 2
+    getYear([DD,MM,YYYY],YYYY)        aridad: 2
 --------------------------------------------- Representacion ------------------------------------------
 El TDA Date se representa a traves de una lista de 3 enteros de la forma dia X mes X año (integer X integer X integer)
 Clausulas:
   Hechos:*/
+
 mes(1,31). mes(2,28). mes(2,29). mes(3,31). mes(4,30). mes(5,31). mes(6,30). mes(7,31). mes(8,31). mes(9,30). mes(10,31). mes(11,30). mes(12,31).
 mesString(1,"Enero"). mesString(2,"Febrero"). mesString(3,"Marzo"). mesString(4,"Abril"). mesString(5,"Mayo"). mesString(6,"Junio"). mesString(7,"Julio").
 mesString(8,"Agosto"). mesString(9,"Septiembre"). mesString(10,"Octubre"). mesString(11,"Noviembre"). mesString(12,"Diciembre").
 
 % getDay: Predicado que obtiene los dias de una fecha
-getDay([D,_,_],D).
+getDay([DD,_,_],DD).
 % getMonth: Predicado que obtiene los meses de una fecha
-getMonth([_,M,_],M).
+getMonth([_,MM,_],MM).
 % getYear: Predicado que obtiene los años de una fecha
-getYear([_,_,Y],Y).
+getYear([_,_,YYYY],YYYY).
 
 % Reglas:
+
 % date: Predicado Constructor de fecha
-date(Day, Month, Year, Date):-
-  integer(Day), integer(Month), integer(Year),mes(Month,Dias),
-  Day=<Dias,
-  Date = [Day, Month, Year].
+date(DD, MM, YYYY, Date):-
+  integer(DD), integer(MM), integer(YYYY),mes(MM,DDs),
+  DD=<DDs,
+  Date = [DD, MM, YYYY].
   
 /*-------------------------------------------TDA PARADIGMADOCS--------------------------------------------------
 Dominios:
-    Nombre:                                           String
-    Date:                                             Date
-    Registrados, Logeados, Documentos, UpdateDocs     Estructura Lista
+    Nombre:                                                                   String
+    Date:                                                                     Date
+    Registrados, Logeados, Documentos, UpdateDocs                             Estructura Lista
 
 Predicados:
-  paradigmaDocs(Name,Date,PDOCS).                                           aridad: 3
-  constPdocs(Name,Date,Registrados,Logeados,Documentos,PDOCS).              aridad: 6
-  getNombrePdocs([Nombre|_],Nombre).                                        aridad: 2
-  getFechaCreacionPdocs([_,Fecha,_,_,_],Fecha).                             aridad: 2
-  getRegistrados([_,_,Registrados|_],Registrados).                          aridad: 2
-  getLogeados([_,_,_,Logeado|_],Logeado).                                   aridad: 2
-  getDocumentos([_,_,_,_,ListaDocs],ListaDocs).                             aridad: 2
-  modificarDocs([NombrePdocs,FechaCreacion,Registrados|_],UpdateDocs,Sn2)   aridad: 3
+    paradigmaDocs(Name,Date,PDOCS).                                           aridad: 3
+    constPdocs(Name,Date,Registrados,Logeados,Documentos,PDOCS).              aridad: 6
+    getNombrePdocs([Nombre|_],Nombre).                                        aridad: 2
+    getFechaCreacionPdocs([_,Fecha,_,_,_],Fecha).                             aridad: 2
+    getRegistrados([_,_,Registrados|_],Registrados).                          aridad: 2
+    getLogeados([_,_,_,Logeado|_],Logeado).                                   aridad: 2
+    getDocumentos([_,_,_,_,ListaDocs],ListaDocs).                             aridad: 2
+    modificarDocs([NombrePdocs,FechaCreacion,Registrados|_],UpdateDocs,Sn2)   aridad: 3
 
 --------------------------------------------- Representacion ------------------------------------------
 El TDA ParadigmaDocs, representa la plataforma donde estan alojados los documentos y usuarios
+
 Clausulas:
   Hechos:*/
+
 % paradigmaDocs: Predicado constructor de la estructura de paradigmaDocs
 paradigmaDocs(Name,Date,[Name,Date,[],[],[]]):-
   string(Name).      % nota: no es necesario verificar que es una fecha, pues el predicado del TDA fecha lo verifica antes de pasarlo
@@ -80,17 +84,13 @@ paradigmaDocs(Name,Date,[Name,Date,[],[],[]]):-
 constPdocs(Name,Date,Registrados,Logeados,Documentos,[Name,Date,Registrados,Logeados,Documentos]).
 
 % getNombrePdocs: Predicado que obtiene el nombre de paradigmaDocs
-getNombrePdocs([Nombre|_],Nombre).
-
+getNombrePdocs([NombreP,_,_,_,_],NombreP).
 % getFechaCreacionPdocs: Predicado que obtiene el nombre de paradigmaDocs
 getFechaCreacionPdocs([_,Fecha,_,_,_],Fecha).
-
 % getRegistrados: Predicado que obtiene la lista de registrados de paradigmaDocs
 getRegistrados([_,_,Registrados,_,_],Registrados).
-
 % getLogeados: Predicado que obtiene la lista de logeados e paradigmaDocs
 getLogeados([_,_,_,Logeado,_],Logeado).
-
 % getDocumentos: Predicado que la lista de documentos de paradigmaDocs
 getDocumentos([_,_,_,_,Documentos],Documentos).
 
@@ -105,20 +105,25 @@ Dominios:
     Registrados, Logeados, Documentos, UpdateDocs       Estructura Lista
 
 Predicados:
-  getUser([Username,_,_],Username).                     aridad: 2
-  getPass([_,Pass,_],Pass).                             aridad: 2
-  getFechaCreacionUser([_,_,Date],Date).                aridad: 2
-  getUserNames([[Username,Pass,Date]...],[Username...]).aridad: 2
-  getPasswords([[Username,Pass,Date]...],[Pass..]).     aridad: 2
-  getLogeado(Pdocs,Logeado).                            aridad: 2
-  registradoAntes(Pdocs,Username)                       aridad: 2
-  miembroPdocs(Pdocs,Usuario,Pass)                      aridad: 3
-  sesionActiva(Pdocs)                                   aridad: 1
+    getUser([Username,_,_],Username).                     aridad: 2
+    getPass([_,Pass,_],Pass).                             aridad: 2
+    getFechaCreacionUser([_,_,Date],Date).                aridad: 2
+    getUserNames([[Username,Pass,Date]...],[Username...]).aridad: 2
+    getPasswords([[Username,Pass,Date]...],[Pass..]).     aridad: 2
+    getLogeado(Pdocs,Logeado).                            aridad: 2
+    registradoAntes(Pdocs,Username)                       aridad: 2
+    miembroPdocs(Pdocs,Usuario,Pass)                      aridad: 3
+    sesionActiva(Pdocs)                                   aridad: 1
 
 --------------------------------------------- Representacion ------------------------------------------
 El TDA User, representa al elemento "usuario" dentro de paradigmaDocs, su estructura es de la forma User XX Pass X Date (String X String X Date)
 Clausulas:
   Hechos:*/
+
+% constUser: Predicado constructor de la estructura del TDA Usuario
+constUser(Username,Password,Fecha,[Username,Password,Fecha]):-
+  string(Username),string(Password).
+
 % getUser: Predicado que obtine el username del usuario registrado
 getUser([Usuario,_,_],Usuario).
 % getUser: Predicado que obtine la contraseña del usuario registrado
@@ -159,43 +164,44 @@ miembroPdocs(Pdocs,Username,Pass):-
   indexOf(Usernames,Username,Index),
   myNth0(Index,Passwords,Pass).
 
-% SesionActiva: Predicado que verifica cuando un usuario tiene sesion activa en paradigmaDocs
+% sesionActiva: Predicado que verifica cuando un usuario tiene sesion activa en paradigmaDocs, retornando true/false
 sesionActiva(Pdocs):-
   getLogeados(Pdocs,Logeados),
   \+Logeados==[].
 
 /*-------------------------------------------TDA DOCUMENTO--------------------------------------------------
 Dominios:
-  Id:                                                 Integer
-  Autor,Titulo,Username:                              String
-  Historial, Shares, IDLIST                           Estructura Lista
-  DOCS:                                               Estructura Lista
-  Date:                                               Date
-  Pdocs:                                              ParadigmaDocs
+    Id:                                                 Integer
+    Autor,Titulo,Username:                              String
+    Historial, Shares, IDLIST                           Estructura Lista
+    DOCS:                                               Estructura Lista
+    Date:                                               Date
+    Pdocs:                                              ParadigmaDocs
 
 Predicados:
-  constDoc(Id,Autor,Titulo,Shares,Historial,DOC)      aridad: 6
-  getIdDoc(DOC,Id)                                    aridad: 2
-  getAutorDoc(DOC,Autor)                              aridad: 2
-  getTituloDoc(DOC,Titulo)                            aridad: 2
-  getAccessesDoc(DOC,Shares)                          aridad: 2
-  getHistorialDoc(DOC,Historial)                      aridad: 2
-  setId(Pdocs,Id)                                     aridad: 2
-  getDocumentById(Pdocs,Id,Docu)                      aridad: 3
-  getRestantes(DOCS,IDLIST,DOCS)                      aridad: 3
-  getSharedDocuments(Username,DOCS,DOCS)              aridad: 3
-  getMyDocs(Username,DOCS,DOCS)                       aridad: 3
-  getDocsCreados(Username,DOCS,DOCS)                  aridad: 3
-  getDocsAcceso(Username,DOCS,DOCS)                   aridad: 3
-  getIdDocCreados(Username,DOCS,DOCS)                 aridad: 3
-  revokeAccesses(DOCS,DOCS)                           aridad: 2
-  revokeAllAccesses(PDocs,DOCS,DOCS)                  aridad: 3
-  getIdsRestantes(DOCS,IDLIST,DOCS)                   aridad: 3
+    constDoc(Id,Autor,Titulo,Shares,Historial,DOC)      aridad: 6
+    getIdDoc(DOC,Id)                                    aridad: 2
+    getAutorDoc(DOC,Autor)                              aridad: 2
+    getTituloDoc(DOC,Titulo)                            aridad: 2
+    getAccessesDoc(DOC,Shares)                          aridad: 2
+    getHistorialDoc(DOC,Historial)                      aridad: 2
+    setId(Pdocs,Id)                                     aridad: 2
+    getDocumentById(Pdocs,Id,Docu)                      aridad: 3
+    getRestantes(DOCS,IDLIST,DOCS)                      aridad: 3
+    getSharedDocuments(Username,DOCS,DOCS)              aridad: 3
+    getMyDocs(Username,DOCS,DOCS)                       aridad: 3
+    getDocsCreados(Username,DOCS,DOCS)                  aridad: 3
+    getDocsAcceso(Username,DOCS,DOCS)                   aridad: 3
+    getIdDocCreados(Username,DOCS,DOCS)                 aridad: 3
+    revokeAccesses(DOCS,DOCS)                           aridad: 2
+    revokeAllAccesses(PDocs,DOCS,DOCS)                  aridad: 3
+    getIdsRestantes(DOCS,IDLIST,DOCS)                   aridad: 3
 
 --------------------------------------------- Representacion ------------------------------------------
 El TDA Documento representa la estructura completa de los documentos: Id X Autor X Titulo X Shares X Historial de forma (Integer X String X String X List X List)
 Clausulas:
   Hechos:*/
+
 % constDoc: Predicado constructor de Documento
 constDoc(Id,Autor,Titulo,Shares,Historial,[[Id,Autor,Titulo,Shares,Historial]]).
 
@@ -210,13 +216,12 @@ getAccessesDoc([_,_,_,Shares|_],Shares).
 % getHistorialDoc: Predicado que obtiene el historial del documento
 getHistorialDoc([_,_,_,_,Historial],Historial).
 
+% Reglas:
+
 % setId: Predicado que coloca id correspondiente a un nuevo documento
 setId(Pdocs,Id):-
   getDocumentos(Pdocs,Docs),
-  length(Docs,Idd),
-  Id is Idd.
-
-% Reglas:
+  length(Docs,Id).
 
 % getDocumentById: Predicado que obtiene un documento mediante su id 
 getDocumentById(Pdocs,Id,Docu):-
@@ -264,7 +269,7 @@ getIdsRestantes(Documentos,[H|T],X):-
   getRestantes(H,Documentos,Actualizada),
   getIdsRestantes(Actualizada,T,X).
 
-% RevokeAccess: Contructor del predicado RevokeAllAccesses que construye un nuevo documento con todos los permisos revocados
+% revokeAccess: Contructor del predicado RevokeAllAccesses que construye un nuevo documento con todos los permisos revocados
 revokeAccesses(Doc,UpdateDoc):-
   getIdDoc(Doc,Id),
   getAutorDoc(Doc,Autor),
@@ -272,13 +277,12 @@ revokeAccesses(Doc,UpdateDoc):-
   getHistorialDoc(Doc,Historial),
   UpdateDoc = [Id,Autor,Titulo,[[Autor,["W","C","R","S"]]],Historial].
 
-% RevokeAllAccesses: Predicado que obtiene una lista de Id's de los documentos que se quieren revocar acceso y a cada uno de ellos les revoca el acceso, si es propietario(Autor) es el logeado
+% revokeAllAccesses: Predicado que obtiene una lista de Id's de los documentos que se quieren revocar acceso y a cada uno de ellos les revoca el acceso, si es propietario(Autor) es el logeado
 revokeAllAccesses(_,[],[]):-!.
 revokeAllAccesses(Pdocs,[Id|T],[H1|T1]):-
   getDocumentById(Pdocs,Id,Doc),
   getAutorDoc(Doc,Autor),
-  getLogeado(Pdocs,Logeado),
-  Autor == Logeado,
+  getLogeado(Pdocs,Autor),
   revokeAccesses(Doc,H1),
   revokeAllAccesses(Pdocs,T,T1).
 
@@ -324,13 +328,15 @@ getDateVersion([_,Date,_],Date).
 %getContenidoVersion: Predicado que obtiene el contenido de la version
 getContenidoVersion([_,_,Contenido],Contenido).
 
+% Reglas:
+
 %getVersionById: Predicado que obtiene una version mediante su idVersion
 getVersionById(Historial,Id,Ver):-
   getIndexElement(Historial,Id,Index),
   myNth0(Index,Historial,Ver).
 
 % getActiveVersion: Recibe el historial de versiones y obtiene la version activa
-getActiveVersion([Active|_],Active):-!.
+getActiveVersion([Active|_],Active).
 
 % getTextoVersiones: Predicado que obtiene el texto de todas las versiones del historial
 getTextoVersiones([],[]).
@@ -384,6 +390,13 @@ createAccesses(Sn1,Permisos,[User|TailUser],[[User,Permisos]|TF]):-
   registradoAntes(Sn1,User),
   createAccesses(Sn1,Permisos,TailUser,TF).
 
+% getUserPermiso: Predicado que obtiene el nombre del usuario que tiene el acceso
+getUserPermiso([Nombre,_],Nombre).
+% getTipoPermiso: Predicado que obtiene el permiso de un acceso
+getTipoPermiso([_,Permiso],Permiso).
+
+% Reglas:
+
 % isAccess: Predicado que determina si un permiso es del tipo "W", "R", "C" o "S", si se cumple es un acceso permitido
 isAccess(Access):-
   myMember(Access,["W","R","C","S"]).
@@ -403,10 +416,6 @@ isEditor(Usuario,Accesses):-
 isShareAdmin(Usuario,Accesses):-
   getPermisos(Usuario,Accesses,PermisosUsuario),
   myMember("S",PermisosUsuario).
-
-% getPermisos: Predicado que obtiene los permisos ["W"] de un usuario
-getUserPermiso([Nombre,_],Nombre).
-getTipoPermiso([_,Permiso],Permiso).
 
 % getPermisos: Predicado que obtiene los permisos ["W"] de un usuario
 getPermisos(UserName,[[UserName,Permisos]|_],Permisos):-!.
@@ -432,15 +441,39 @@ permisoString("R","Lectura").
 permisoString("C","Comentarios").
 permisoString("S","Compartir").
 
-%  -------------------------------------------OTROS PREDICADOS / HECHOS---------------------------------------------------
+/*  -------------------------------------------OTROS PREDICADOS / HECHOS---------------------------------------------------
+Dominios:
+    E:                                                                       Cualquier tipo de dato
+    T, Lista,Registrados,Docs,Permisos,Accesses,Historial:                   Estructura Lista
+    Index, Charac:                                                           Integer
+    StringOriginal,StringBuscado,StringDelet,SearchStr,ReplaceStr,ResultStr: String
+    Date:                                                                    Date
+Predicados:
+    addHead(E,Lista,[E|Lista])                                               aridad: 3
+    indexOf([E|_], E, 0)                                                     aridad: 3
+    myMember(E,[E|_])                                                        aridad: 2
+    myNth0(0,[H|_],H)                                                        aridad: 3
+    getIndexElement([[E|_]|_], E, 0)                                         aridad: 3
+    deleteLast(StringOriginal,Charac,StringDelet)                            aridad: 3
+    searchSubstring(StringOriginal,StringBuscado)                            aridad: 2
+    strinReplaceAll(StringOriginal,SearchStr,ReplaceStr,ResultStr)           aridad: 4
+    dateString(Date,DateString)                                              aridad: 2
+    registradosToString(Registrados,[ResultStr])                             aridad: 2
+    docsToString(Docs,[H1|T1])                                               aridad: 2
+    permisoToString(Permisos,[ResultStr])                                    aridad: 2
+    accessToString(Accesses,[ResultStr])                                     aridad: 2
+    historialToString(Historial,[ResultStr])                                 aridad: 2
+    
+
+*/
 % AddHead: Añade elemento a la cabeza de la lista
 addHead(E,Lista,[E|Lista]).
 
 % IndexOf: Predicado que obtiene el índice de un elemento
-indexOf([Element|_], Element, 0):-!. % We found the element
-indexOf([_|Tail], Element, Index):-
-  indexOf(Tail, Element, Index1),    % Check in the tail of the list
-  Index is Index1+1.                 % and increment the resulting index
+indexOf([E|_], E, 0):-!.
+indexOf([_|Tail], E, Index):-
+  indexOf(Tail, E, Index1),
+  Index is Index1+1.
 
 % myMember: Verifica si un elemento esta en una lista (Detiene el backtracking al encontrar la primera coincidiencia)
 myMember(E,[E|_]):-!.
@@ -453,26 +486,28 @@ myNth0(Index,[_|T],E):-
   Index1 is Index - 1,
   myNth0(Index1,T,E).
 
-% getIndexElement: Predicado que obtiene el indice de un documento
-getIndexElement([[Element|_]|_], Element, 0):-!.
-getIndexElement([_|Tail], Element, Index):-
-  getIndexElement(Tail, Element, Index1),
+% getIndexElement: Predicado que obtiene el indice de un elemento buscado
+getIndexElement([[E|_]|_], E, 0):-!.
+getIndexElement([_|T], E, Index):-
+  getIndexElement(T, E, Index1),
   Index is Index1+1.
+
 % ******************* STRING OPERATORS ******************
 % deleteLast: Predicado que elimina los utlimos caracteres de un string, se obtiene "" en caso el largo del string sea menor a lo que se quiere recortar
-deleteLast(String,Charac,StringDelet):-
-  sub_string(String,0,_,Charac,StringDelet),!.
-deleteLast(String,Charac,""):-
-  string_length(String,Len),
+deleteLast(StringOriginal,Charac,StringDelet):-
+  sub_string(StringOriginal,0,_,Charac,StringDelet),!.
+deleteLast(StringOriginal,Charac,""):-
+  string_length(StringOriginal,Len),
   Len < Charac,!.
+
 % searchSubstring: Predicado que determina si un String(StringBuscado) es subString de otro String(String Original)
 searchSubstring(StringOriginal,StringBuscado):-
   sub_string(StringOriginal,_,_,_,StringBuscado),!.
 
 % strinReplaceAll: Predicado recursivvo que reemplaza todas las coincidencias de un texto
-strinReplaceAll(String,SearchStr,ReplaceStr,ResultStr):-
-  searchSubstring(String,SearchStr),
-  re_replace(SearchStr,ReplaceStr,String,Replaced),
+strinReplaceAll(StringOriginal,SearchStr,ReplaceStr,ResultStr):-
+  searchSubstring(StringOriginal,SearchStr),
+  re_replace(SearchStr,ReplaceStr,StringOriginal,Replaced),
   strinReplaceAll(Replaced,SearchStr,ReplaceStr,ResultStr),!.
 strinReplaceAll(Replaced,_,_,Replaced).
 
@@ -508,7 +543,7 @@ permisoToString([Permiso|TailPermiso],[H1|T1]):-
   permisoString(Permiso,H1),
   permisoToString(TailPermiso,T1).
 
-%permisoToString: Predicado que convierte los accesos a String
+%accessToString: Predicado que convierte los accesos a String
 accessToString([],[]).
 accessToString([Access|TailAccess],[H1|T1]):-
   getUserPermiso(Access,Nombre),
@@ -517,7 +552,7 @@ accessToString([Access|TailAccess],[H1|T1]):-
   atomics_to_string(["\n\t   * ",Nombre," Permiso de ",StringPermiso],H1),
   accessToString(TailAccess,T1).
 
-%permisoToString: Predicado que convierte el historial a String
+%historialToString: Predicado que convierte el historial a String
 historialToString([],[]).
 historialToString([Version|RestoVer],[H1|T1]):-
   getIdVersion(Version,Idver),
@@ -526,8 +561,6 @@ historialToString([Version|RestoVer],[H1|T1]):-
   getContenidoVersion(Version,ContenidoVer),
   atomics_to_string(["\t\t* * * * * Version ", Idver," * * * * * \n\t\tCreada el ",DateString,"\n\t\t",ContenidoVer,"\n"],H1),
   historialToString(RestoVer,T1).
-
-
 
 /*------------------------------------------------------------------MAIN----------------------------------------------------------------------
 Seccion principal donde todos los TDA son usados para realizar operaciones sobre los documentos de paradigmaDocs, por lo tanto estos se convierten
@@ -541,17 +574,17 @@ Dominios:
     Sn1,Sn2:                                                                                ParadigmaDocs
 
 Predicados:
-  paradigmaDocsRegister(Sn1,Fecha,Username,Password,Sn2)                                    aridad: 5
-  paradigmaDocsLogin(Sn1,Username,Password,Sn2)                                             aridad: 4
-  paradigmaDocsCreate(Sn1, Fecha, Nombre, Contenido,Sn2)                                    aridad: 4
-  paradigmaDocsShare(Sn1,DocumentId,ListaPermisos,ListaUsernamesPermitidos,Sn2)             aridad: 5
-  paradigmaDocsAdd(Sn1,DocumentId,Date,ContenidoTexto,Sn2)                                  aridad: 5
-  paradigmaDocsRestoreVersion(Sn1,DocumentId,IdVersion,Sn2)                                 aridad: 4
-  paradigmaDocsToString(Sn1,PDocsString)                                                    aridad: 2
-  paradigmaDocsRevokeAllAccesses(Sn1,DocumentIds,Sn2)                                       aridad: 3
-  paradigmaDocsDelete(Sn1,DocumentId,Date,NumberOfCharacters,Sn2)                           aridad: 5
-  paradigmaDocsSearch(Sn1,String,Documents)                                                 aridad: 3
-  paradigmaDocsSearchAndReplace(Sn1,DocumentId,Text1,Text2,Sn2)                             aridad: 5
+    paradigmaDocsRegister(Sn1,Fecha,Username,Password,Sn2)                                    aridad: 5
+    paradigmaDocsLogin(Sn1,Username,Password,Sn2)                                             aridad: 4
+    paradigmaDocsCreate(Sn1, Fecha, Nombre, Contenido,Sn2)                                    aridad: 5
+    paradigmaDocsShare(Sn1,DocumentId,ListaPermisos,ListaUsernamesPermitidos,Sn2)             aridad: 5
+    paradigmaDocsAdd(Sn1,DocumentId,Fecha,ContenidoTexto,Sn2)                                 aridad: 5
+    paradigmaDocsRestoreVersion(Sn1,DocumentId,IdVersion,Sn2)                                 aridad: 4
+    paradigmaDocsToString(Sn1,PDocsString)                                                    aridad: 2
+    paradigmaDocsRevokeAllAccesses(Sn1,DocumentIds,Sn2)                                       aridad: 3
+    paradigmaDocsDelete(Sn1,DocumentId,Fecha,NumberOfCharacters,Sn2)                          aridad: 5
+    paradigmaDocsSearch(Sn1,String,Documents)                                                 aridad: 3
+    paradigmaDocsSearchAndReplace(Sn1,DocumentId,Text1,Fecha,Text2,Sn2)                       aridad: 6
 
 Metas:
   Metas Primarias: paradigmaDocsRegister, paradigmaDocsLogin, paradigmaDocsCreate, paradigmaDocsShare, paradigmaDocsAdd, paradigmaDocsRestoreVersion, 
@@ -569,15 +602,14 @@ Reglas:*/
 % ParadigmaDocsRegister: Predicado que permite a un usuario registrarse en paradigmaDocs
 % Dominio: Sn1, Fecha, Username, Password, Sn2
 paradigmaDocsRegister(Sn1,Fecha,Username,Password,Sn2):-
-  string(Username),
-  string(Password),
   \+registradoAntes(Sn1,Username),
   getNombrePdocs(Sn1,Nombre),
   getFechaCreacionPdocs(Sn1,FechaCreacion),
   getLogeados(Sn1,Logeados),
   getDocumentos(Sn1,Docs),
   getRegistrados(Sn1,Registrados),
-  append(Registrados,[[Username,Password,Fecha]],UpdateRegistrados),
+  constUser(Username,Password,Fecha,Usuario),
+  append(Registrados,[Usuario],UpdateRegistrados),
   Sn2 = [Nombre,FechaCreacion,UpdateRegistrados,Logeados,Docs],!.
 
 % ParadigmaDocsLogin: Predicado que inicia sesion a un usuario registrado y le permite hacer cualquier operacion permitida
@@ -597,8 +629,7 @@ paradigmaDocsLogin(Sn1,Username,Password,Sn2):-
 % ParadigmaDocsCreate: Predicado que permite al usuario con sesion activa crear un nuevo documento
 % Dominio: Sn1, Fecha, Nombre, Contenido, Sn2
 paradigmaDocsCreate(Sn1, Fecha, Nombre, Contenido,Sn2):-
-  string(Nombre),
-  string(Contenido),
+  string(Nombre),string(Contenido),
   sesionActiva(Sn1),    % Si existe sesion activa se saca al usuario
   getDocumentos(Sn1,Docs),
   getLogeado(Sn1,Autor),
@@ -608,7 +639,7 @@ paradigmaDocsCreate(Sn1, Fecha, Nombre, Contenido,Sn2):-
   append(Docs,Doc,UpdateDocs),
   modificarDocs(Sn1,UpdateDocs,Sn2).
 % ParadigmaDocsShare: Predicado que permite al usuario con sesion activa, compartir un documento con otros usuarios registrados en paradigmaDocs
-% Dominio: Sn1, DocumentId, ListaPermisos, ListaUsernames Permitidos, Sn2
+% Dominio: Sn1, DocumentId, ListaPermisos, ListaUsernamesPermitidos, Sn2
 paradigmaDocsShare(Sn1,DocumentId,ListaPermisos,ListaUsernamesPermitidos,Sn2):-
   sesionActiva(Sn1),
   ListaPermisos \== [],
@@ -623,17 +654,17 @@ paradigmaDocsShare(Sn1,DocumentId,ListaPermisos,ListaUsernamesPermitidos,Sn2):-
   append(Restantes,NuevoDoc,UpdateDocs),
   modificarDocs(Sn1,UpdateDocs,Sn2).
 % ParadigmaDocsAdd: Predicado que permite al usuario con sesion activa añadir texto en la sesion activa de un documento, pasando esta actualizacion como sesion activa
-% Dominio: Sn1, DocumentId, Date, ContenidoTexto, Sn2
-paradigmaDocsAdd(Sn1,DocumentId,Date,ContenidoTexto,Sn2):-
+% Dominio: Sn1, DocumentId, Fecha, ContenidoTexto, Sn2
+paradigmaDocsAdd(Sn1,DocumentId,Fecha,ContenidoTexto,Sn2):-
   sesionActiva(Sn1),
   string(ContenidoTexto),
   getDocumentos(Sn1,Docs),
   getLogeado(Sn1,Logeado),
-  getDocumentById(Sn1,DocumentId,[Id,Autor,TituloDoc,Accesses,Historial]),    % get the document
+  getDocumentById(Sn1,DocumentId,[Id,Autor,TituloDoc,Accesses,Historial]),
   isEditor(Logeado,Accesses),
-  getActiveVersion(Historial,[IdVersion,_,ContenidoVersion]),  % get Active version
+  getActiveVersion(Historial,[IdVersion,_,ContenidoVersion]),
   string_concat(ContenidoVersion, ContenidoTexto, NuevoContenido),
-  constVersion(IdVersion,Date, NuevoContenido, NuevaVersion),
+  constVersion(IdVersion,Fecha, NuevoContenido, NuevaVersion),
   addHead(NuevaVersion,Historial,NuevoHistorial),
   constDoc(Id,Autor,TituloDoc,Accesses,NuevoHistorial,NuevoDoc),
   getRestantes(DocumentId,Docs,RestantesDoc),
@@ -646,56 +677,53 @@ paradigmaDocsRestoreVersion(Sn1,DocumentId,IdVersion,Sn2):-
   sesionActiva(Sn1),
   getLogeado(Sn1,Logeado),
   getDocumentos(Sn1,Docs),
-  getDocumentById(Sn1,DocumentId,[Id,Autor,Titulo,Accesses,Historial]),    % get the document
-  Autor == Logeado,
+  getDocumentById(Sn1,DocumentId,[Id,Logeado,Titulo,Accesses,Historial]),
   getVersionById(Historial,IdVersion,Restaurada),
   getRestantes(IdVersion,Historial,VerRestantes),
   addHead(Restaurada,VerRestantes,NuevoHistorial),
-  constDoc(Id,Autor,Titulo,Accesses,NuevoHistorial,NuevoDoc),
+  constDoc(Id,Logeado,Titulo,Accesses,NuevoHistorial,NuevoDoc),
   getRestantes(DocumentId,Docs,RestantesDoc),
   append(RestantesDoc,NuevoDoc,UpdateDocs),
   modificarDocs(Sn1,UpdateDocs,Sn2).
 
 % ParadigmaDocsToString: Predicado que muestra informacion de paradigmaDocs en formato string, para que sea entendible por el usuario
-% Dominio: Sn1, DocumentId, Date, ContenidoTexto, Sn2
+% Dominio: Sn1, PDocsString
+% Version 1: Cuando se muestra información todos los documentos que tiene acceso un usuario logeado
 paradigmaDocsToString(Sn1,PDocsString):-
   sesionActiva(Sn1),
   getLogeado(Sn1,Logeado),
   getDocumentos(Sn1,Docs),
   getDocsCreados(Logeado,Docs,DocsCreados),
   getDocsAcceso(Logeado,Docs,DocsAcceso),
-
   docsToString(DocsCreados,DocStringCreados),atomics_to_string(DocStringCreados,DocStrings1),
   docsToString(DocsAcceso,DocStringAcceso),atomics_to_string(DocStringAcceso,DocStrings2),
   atomics_to_string(["\n* * * * * * * * *  ",Logeado,"  * * * * * * * * *  \n\n*********** Es Propietario de ***********",
   DocStrings1,"\n************ Tiene acceso a *************\n",DocStrings2],PDocsString),!.
-
+% Version 2: Se muestra toda la información de la plataforma
 paradigmaDocsToString(Sn1,PDocsString):-
   \+sesionActiva(Sn1),
   getNombrePdocs(Sn1,Nombre),
   getFechaCreacionPdocs(Sn1,FechaCreacion),
   getRegistrados(Sn1,Registrados),
   getDocumentos(Sn1,Docs),
-
   dateString(FechaCreacion,DateString),
   registradosToString(Registrados,RegiStringList),atomics_to_string(RegiStringList,RegiString),
-  
   docsToString(Docs,DocString),atomics_to_string(DocString,DocStrings),
-  atomics_to_string(["\n* * * * * * * ",Nombre," * * * * * * *","\n",
-  "Creado el ",DateString,"\n\n",
-  "******** Usuarios Registrados ******** ",RegiString,"\n",
-  "************* Documentos ************ ",DocStrings],PDocsString),!.
+  atomics_to_string(["\n* * * * * * * ",Nombre," * * * * * * *","\n","Creado el ",DateString,"\n\n",
+  "******** Usuarios Registrados ******** ",RegiString,"\n","************* Documentos ************ ",DocStrings],PDocsString),!.
 
 % ParadigmaDocsRevokeAllAccesses: Predicado que permite al usuario con sesion activa, eliminar todos los permisos de una lista de Ids a los que el usuario es autor, si se ingresa [], se elimina todos los accesos a los documentos creados
 % Dominio: Sn1, DocumentIds, Sn2
+% Version 1: (paradigmaDocsRevokeAllAccesses) cuando la lista de IdsDocumentos no es [], se revocan los documentos seleccionados
 paradigmaDocsRevokeAllAccesses(Sn1,DocumentIds,Sn2):-
   sesionActiva(Sn1),
-  DocumentIds \= [],
+  DocumentIds \== [],
   getDocumentos(Sn1,Docs),
   revokeAllAccesses(Sn1,DocumentIds,RevokedDocuments),
   getIdsRestantes(Docs,DocumentIds,RestantesDoc),
   append(RestantesDoc,RevokedDocuments,UpdateDocs),
   modificarDocs(Sn1,UpdateDocs,Sn2),!.
+% Version 2: (paradigmaDocsRevokeAllAccesses) cuando la lista de IdsDocumentos es [], se revocan todos los documentos donde el usuario es autor
 paradigmaDocsRevokeAllAccesses(Sn1,[],Sn2):-
   sesionActiva(Sn1),
   getLogeado(Sn1,Logeado),
@@ -708,8 +736,8 @@ paradigmaDocsRevokeAllAccesses(Sn1,[],Sn2):-
   modificarDocs(Sn1,UpdateDocs,Sn2).
 
 % ParadigmaDocsDelete: Predicado que permite al usuario con sesion activa, eliminar los ultimos "n" caracteres del contenido de la version activa, si el "n" a eliminar es mayor a largo, se elimina todo la cadena quedando ""
-% Dominio: Sn1, DocumentId, Date, NumberOfCharacters, Sn2
-paradigmaDocsDelete(Sn1,DocumentId,Date,NumberOfCharacters,Sn2):-
+% Dominio: Sn1, DocumentId, Fecha, NumberOfCharacters, Sn2
+paradigmaDocsDelete(Sn1,DocumentId,Fecha,NumberOfCharacters,Sn2):-
   sesionActiva(Sn1),
   integer(NumberOfCharacters),
   getDocumentos(Sn1,Docs),
@@ -718,7 +746,7 @@ paradigmaDocsDelete(Sn1,DocumentId,Date,NumberOfCharacters,Sn2):-
   isEditor(Logeado,Accesses),
   getActiveVersion(Historial,[IdVersion,_,ContenidoVersion]),  % get Active version
   deleteLast(ContenidoVersion,NumberOfCharacters,NuevoContenido),
-  constVersion(IdVersion,Date, NuevoContenido, NuevaVersion),
+  constVersion(IdVersion,Fecha, NuevoContenido, NuevaVersion),
   addHead(NuevaVersion,Historial,NuevoHistorial),
   constDoc(Id,Autor,TituloDoc,Accesses,NuevoHistorial,NuevoDoc),
   getRestantes(DocumentId,Docs,RestantesDoc),
@@ -735,8 +763,9 @@ paradigmaDocsSearch(Sn1,String,Documents):-
   append(DocsCreados,DocsAcceso,AllDocs),
   getDocCoincidencias(String,AllDocs,Documents).
 % ParadigmaDocsSearchAndReplace: Predicado que permite al usuario buscar texto en la version activa de un documento mediante su "id" y reemplaza las ocurrencias por otro texto ingrado
-% Dominio: Sn1, String, Documents, Sn2
-paradigmaDocsSearchAndReplace(Sn1,DocumentId,Text1,Text2,Sn2):-
+% Dominio: Sn1, DocumentIds, String, Fecha, String, Sn2
+% Version 1: (paradigmaDocsSearchAndReplace) Cuando el texto buscado se encuetra, se duelve paradigmaDocs con el texto reemplazado
+paradigmaDocsSearchAndReplace(Sn1,DocumentId,Text1,Fecha,Text2,Sn2):-
   sesionActiva(Sn1),
   string(Text1),
   string(Text2),
@@ -744,30 +773,30 @@ paradigmaDocsSearchAndReplace(Sn1,DocumentId,Text1,Text2,Sn2):-
   getDocumentos(Sn1,Docs),
   getDocumentById(Sn1,DocumentId,[Id,Autor,TituloDoc,Accesses,Historial]),    % get the document
   isEditor(Logeado,Accesses),
-  getActiveVersion(Historial,[IdVersion,DateVersion,ContenidoVersion]),  % get Active version
+  getActiveVersion(Historial,[IdVersion,_,ContenidoVersion]),  % get Active version
   searchSubstring(ContenidoVersion,Text1),
   strinReplaceAll(ContenidoVersion,Text1,Text2,StringReplaced),
-  constVersion(IdVersion,DateVersion,StringReplaced,NuevaVersion),
+  constVersion(IdVersion,Fecha,StringReplaced,NuevaVersion),
   addHead(NuevaVersion,Historial,NuevoHistorial),
   constDoc(Id,Autor,TituloDoc,Accesses,NuevoHistorial,NuevoDoc),
   getRestantes(DocumentId,Docs,RestantesDoc),
   append(RestantesDoc,NuevoDoc,UpdateDocs),
   modificarDocs(Sn1,UpdateDocs,Sn2),!.
-
-paradigmaDocsSearchAndReplace(Sn1,DocumentId,Text1,Text2,_):-
+% Version 2: (paradigmaDocsSearchAndReplace) Cuando no se encuentra el texto buscado, se envia un mensaje mediante el predicado write y todo el documento de entrada
+paradigmaDocsSearchAndReplace(Sn1,DocumentId,Text1,_,Text2,_):-
   sesionActiva(Sn1),
   string(Text1),
   string(Text2),
   getLogeado(Sn1,Logeado),
-  getDocumentById(Sn1,DocumentId,Doc),    % get the document
+  getDocumentById(Sn1,DocumentId,Doc),
   getAccessesDoc(Doc,Accesses),
   getHistorialDoc(Doc,Historial),
   isEditor(Logeado,Accesses),
-  getActiveVersion(Historial,[_,_,ContenidoVersion]),  % get Active version
+  getActiveVersion(Historial,[_,_,ContenidoVersion]),
   \+searchSubstring(ContenidoVersion,Text1),
   docsToString([Doc],StringDoc),
   atomics_to_string(StringDoc,StringsDoc),
-  write("\n\n>>>> No se encuentran coicidencias en el documento <<<<< \n"),
+  write("\n>>> No se encuentran coicidencias en el documento, se retorna el documento original <<<\n"),
   write(StringsDoc).
 
 /*> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > EJEMPLOS < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < 
@@ -790,14 +819,14 @@ date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDo
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5).
 
 ************************************************************* Excepciones(false) **********************************************************************************
-2. Se intenta logear un usuario cuando ya existe una sesión activa en paradigmaDocs(false):
-date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsLogin(PD5,"kim","4321",PD6).
-
-3. El usuario "saul" se intenta logear con contraseña incorrecta, el predicado, retorna false:
+2. El usuario "saul" se intenta logear con contraseña incorrecta, el predicado, retorna false:
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"saul","qwerty",PD5).
 
-4. Se intenta logear un usuario, no registrado en paradigmaDocs, retorna false:
+3. Se intenta logear un usuario, no registrado en paradigmaDocs, retorna false:
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"mike","98415",PD5).
+
+4. Se intenta logear un usuario cuando ya existe una sesión activa en paradigmaDocs(false):
+date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsLogin(PD5,"kim","4321",PD6).
 
 > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > Create < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < 
 
@@ -818,6 +847,7 @@ date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDo
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsCreate(PD4,D1,"DocChuck","Contenidochuck",PD5).
 
 > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > Share < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < 
+
 1. El usuario kim se logea y posterior a esto, aplica "Share" al documento de ID=2 el cual es dueña, y otorga los permisos de ["S"] a los usuarios "chuck" y a "saul"
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsShare(PD11,2,["S"],["chuck","saul"],PD12).
 
@@ -876,7 +906,8 @@ date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDo
 5. El usuario Saul no es dueño del documento id:2
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,2,1,PD22).
 
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ParadigmaDocsToString < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < 
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > ParadigmaDocsToString < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < 
+
 1. Version de paradigmaDocsToString sin usuario logeado
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsToString(PD22,Sout),write(Sout).
 
@@ -884,9 +915,9 @@ date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDo
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"saul","1234",PD23),paradigmaDocsShare(PD23,1,["W","R","S"],["chuck","kim"],PD24),paradigmaDocsLogin(PD24,"kim","4321",PD25),paradigmaDocsToString(PD25,Sout),write(Sout).
 
 3. Version de paradigmaDocsToString con un usuario logeado "chuck"
-  date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"chuck","qwerty",PD23),paradigmaDocsToString(PD23,Sout),write(Sout).
+date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"chuck","qwerty",PD23),paradigmaDocsToString(PD23,Sout),write(Sout).
 
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Revoke All Accesses < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < 
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > Revoke All Accesses < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < 
 
 1. El usuario kim revoca el acceso a todos sus documentos (id:3, id:2), ingresando [], se puede apreciar mas claramente en paradigmaDocsToString
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsLogin(PD24,"kim","4321",PD25),paradigmaDocsRevokeAllAccesses(PD25,[],PD26).
@@ -894,8 +925,11 @@ date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDo
 2. El usuario kim revoca el acceso al documento id:2, ingresando [2], los otros documentos permanecen con accesos
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsLogin(PD24,"kim","4321",PD25),paradigmaDocsRevokeAllAccesses(PD25,[2],PD26).
 
-3. El usuario kim revoca el acceso al documento id:2, ingresando [2,3], los otros documentos permanecen con accesos
+3. El usuario kim revoca el acceso al documento id:2,3, ingresando [2,3], los otros documentos permanecen con accesos
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsLogin(PD24,"kim","4321",PD25),paradigmaDocsRevokeAllAccesses(PD25,[2,3],PD26).
+
+-> Este ejemplo se puede comprobar, realizando revokeAllAccesses[2,3] y realizando revokeAllAccesses[], donde se puede apreciar que los paradigmaDocs son iguales (PD26=PD28)
+date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsLogin(PD24,"kim","4321",PD25),paradigmaDocsRevokeAllAccesses(PD25,[2,3],PD26),paradigmaDocsLogin(PD26,"kim","4321",PD27),paradigmaDocsRevokeAllAccesses(PD27,[],PD28).
 
 4. El usuario chuck revoca el acceso al documento id:0, ingresando [0], los otros documentos permanecen con accesos
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsLogin(PD24,"chuck","qwerty",PD25),paradigmaDocsRevokeAllAccesses(PD25,[0],PD26).
@@ -904,13 +938,13 @@ date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDo
 5. El usuario Saul no es dueño del documento id:0
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsLogin(PD24,"saul","1234",PD25),paradigmaDocsRevokeAllAccesses(PD25,[0],PD26).
 
-6. Kim desea revocar los accesos [2,3,4] donde id:4 no es dueña Retorna (false)
-date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsLogin(PD24,"kim","4321",PD25),paradigmaDocsRevokeAllAccesses(PD25,[2,3,4],PD26).
+6. Kim desea revocar los accesos [2,3,4] donde id:1 no es dueña Retorna (false)
+date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsLogin(PD24,"kim","4321",PD25),paradigmaDocsRevokeAllAccesses(PD25,[2,3,1],PD26).
 
 7. No hay sesión activa retorna (false)
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsRevokeAllAccesses(PD24,[2],PD25).
 
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Delete < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < 
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > Delete < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < 
 
 1. Se borran los ultimos 10 caracteres de la version activa del documento id:1 el cual Saul tiene acceso, quedando: "ContenidoSaul/Contenido Aniadid"
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsLogin(PD24,"saul","1234",PD25),paradigmaDocsDelete(PD25,1,D3,10,PD26).
@@ -919,7 +953,7 @@ date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDo
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsLogin(PD24,"saul","1234",PD25),paradigmaDocsDelete(PD25,1,D3,100,PD26).
 
 3. Se borran los ultimos 13 caracteres del documento id:3 al que chuck tiene acceso, quedando "2"
-date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsLogin(PD24,"chuck","qwerty",PD25),paradigmaDocsDelete(PD25,3,D3,13,PD26).  
+date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsLogin(PD24,"chuck","qwerty",PD25),paradigmaDocsDelete(PD25,3,D3,13,PD26).
 
 *************************************************************** Excepciones(false) *************************************************************************************
 4. Usuario Chuck no tiene acceso al documento id:1
@@ -928,7 +962,7 @@ date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDo
 5. No hay sesion activa, retorna (false):
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsDelete(PD24,2,D3,10,PD25). 
 
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Search < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < 
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > Search < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < 
 
 1. Se busca "Contenido" en los documentos a los que "kim" tiene acceso , se encuentra una coincidencia en doc id:2 y id:3
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsLogin(PD24,"kim","4321",PD25),paradigmaDocsSearch(PD25,"Contenido",Documents).
@@ -946,21 +980,24 @@ date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDo
 4. No hay sesion activa, retorna (false):
 date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsShare(PD23,3,["W","R","S"],["chuck","saul"],PD24),paradigmaDocsSearch(PD24,"Saul",Documents).
 
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Search And Replace < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < 
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > Search And Replace < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < 
 
 1. El usuario "kim" se logea y ejecuta search and Replace, luego busca la palabra "Contenido" en sus documentos y es reemplazada por "HOLA" (Todas las coincidencias)
-date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsSearchAndReplace(PD23,2,"Contenido","HOLA",PD24).
+date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"kim","4321",PD23),paradigmaDocsSearchAndReplace(PD23,2,"Contenido",D3,"HOLA",PD24).
 
-2. El usuario "chuck" tiene acceso al documento de id:2 por lo tanto puede reemplazar texto, en este caso la palabra "Aniadido", la cual es reemplazada por " Reemplazando texto :) "
-date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"chuck","qwerty",PD23),paradigmaDocsSearchAndReplace(PD23,2,"Aniadido"," Reemplazando texto :) ",PD24).
+2. El usuario "chuck" tiene acceso de escritura al documento de id:2 por lo tanto puede reemplazar texto, en este caso la palabra "Aniadido", la cual es reemplazada por " Reemplazando texto :) "
+date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"chuck","qwerty",PD23),paradigmaDocsSearchAndReplace(PD23,2,"Aniadido",D3," Reemplazando texto :) ",PD24).
 
 3. El texto buscado no se encuentra, por lo tanto se imprime mediante el predicado write(">>>> No se encuentran coicidencias en el documento <<<<") y el documento donde no hay coincidencias
-date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"chuck","qwerty",PD23),paradigmaDocsSearchAndReplace(PD23,2,"Palabra Distinta"," Reemplazando texto :) ",PD24).
+date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"chuck","qwerty",PD23),paradigmaDocsSearchAndReplace(PD23,2,"Palabra Distinta",D2," Reemplazando texto :) ",PD24).
 
 ******************************************************************** Excepciones(false) *************************************************************************************
 4. El usuario no tiene acceso a tal documento
-date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"chuck","qwerty",PD23),paradigmaDocsSearchAndReplace(PD23,1,"Aniadido"," Reemplazando texto :) ",PD24).
+date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"chuck","qwerty",PD23),paradigmaDocsSearchAndReplace(PD23,1,"Aniadido",D2," Reemplazando texto :) ",PD24).
 
-5. No hay sesion activa, retorna (false):
-date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsSearchAndReplace(PD22,1,"Aniadido"," Reemplazando texto :) ",PD23).
+5. No hay sesion activa, retorna (false)
+date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsSearchAndReplace(PD22,1,"Aniadido",D3," Reemplazando texto :) ",PD23).
+
+6. El documento id:5 no existe
+date(20, 12, 2020, D1),date(29, 10, 2021, D2),date(12, 08, 2021, D3),paradigmaDocs("Google docs", D1, PD1),paradigmaDocsRegister(PD1, D1, "chuck", "qwerty", PD2),paradigmaDocsRegister(PD2,D2,"saul","1234",PD3),paradigmaDocsRegister(PD3,D3,"kim","4321",PD4),paradigmaDocsLogin(PD4,"chuck","qwerty",PD5),paradigmaDocsCreate(PD5,D1,"DocChuck","Contenidochuck",PD6),paradigmaDocsLogin(PD6,"saul","1234",PD7),paradigmaDocsCreate(PD7,D1,"DocSaul","ContenidoSaul",PD8),paradigmaDocsLogin(PD8,"kim","4321",PD9),paradigmaDocsCreate(PD9,D1,"DocKim","ContenidoKim",PD10),paradigmaDocsLogin(PD10,"kim","4321",PD11),paradigmaDocsCreate(PD11,D1,"2DocKim2","2ContenidoKim2",PD12),paradigmaDocsLogin(PD12,"kim","4321",PD13),paradigmaDocsShare(PD13,2,["W","R","S"],["chuck","saul"],PD14),paradigmaDocsLogin(PD14,"chuck","qwerty",PD15),paradigmaDocsAdd(PD15,2,D3," Contenido Aniadido por Chuck",PD16),paradigmaDocsLogin(PD16,"kim","4321",PD17),paradigmaDocsAdd(PD17,2,D3,"/Contenido Aniadido por Kim",PD18),paradigmaDocsLogin(PD18,"saul","1234",PD19),paradigmaDocsAdd(PD19,1,D3,"/Contenido Aniadido por Saul",PD20),paradigmaDocsLogin(PD20,"saul","1234",PD21),paradigmaDocsRestoreVersion(PD21,1,1,PD22),paradigmaDocsLogin(PD22,"chuck","qwerty",PD23),paradigmaDocsSearchAndReplace(PD23,10,"Reemplazar",D2," Reemplazando texto :) ",PD24).
 */
