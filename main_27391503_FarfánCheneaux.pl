@@ -1,15 +1,15 @@
-/*__           ___      .______        ___   
- |  |         /   \     |   _  \      |__ \  
- |  |        /  ^  \    |  |_)  |        ) | 
+/*__           ___      .______        ___ 
+ |  |         /   \     |   _  \      |__ \
+ |  |        /  ^  \    |  |_)  |        ) |
  |  |       /  /_\  \   |   _  <        / /  
  |  `----. /  _____  \  |  |_)  |  __  / /_  
- |_______|/__/     \__\ |______/  (__)|____|                                           
+ |_______|/__/     \__\ |______/  (__)|____|
    _______       _______    ______     ______      _______.
   /  _____|     |       \  /  __  \   /      |    /       |
  |  |  __       |  .--.  ||  |  |  | |  ,----'   |   (----`
- |  | |_ |      |  |  |  ||  |  |  | |  |         \   \    
- |  |__| |  __  |  '--'  ||  `--'  | |  `----..----)   |   
-  \______| (__) |_______/  \______/   \______||_______/    
+ |  | |_ |      |  |  |  ||  |  |  | |  |         \   \
+ |  |__| |  __  |  '--'  ||  `--'  | |  `----..----)   |
+  \______| (__) |_______/  \______/   \______||_______/
 
 -> Nícolas Farfán Cheneaux, sección RG 2021/2
 -> Breve Descripción:
@@ -56,19 +56,19 @@ date(DD, MM, YYYY, Date):-
   
 /*-------------------------------------------TDA PARADIGMADOCS--------------------------------------------------
 Dominios:
-    Nombre:                                                                   String
-    Date:                                                                     Date
-    Registrados, Logeados, Documentos, UpdateDocs                             Estructura Lista
+    Nombre:                                                                     String
+    Date:                                                                       Date
+    Registrados, Logeados, Documentos, UpdateDocs                               Estructura Lista
 
 Predicados:
-    paradigmaDocs(Name,Date,PDOCS).                                           aridad: 3
-    constPdocs(Name,Date,Registrados,Logeados,Documentos,PDOCS).              aridad: 6
-    getNombrePdocs([Nombre|_],Nombre).                                        aridad: 2
-    getFechaCreacionPdocs([_,Fecha,_,_,_],Fecha).                             aridad: 2
-    getRegistrados([_,_,Registrados|_],Registrados).                          aridad: 2
-    getLogeados([_,_,_,Logeado|_],Logeado).                                   aridad: 2
-    getDocumentos([_,_,_,_,ListaDocs],ListaDocs).                             aridad: 2
-    modificarDocs([NombrePdocs,FechaCreacion,Registrados|_],UpdateDocs,Sn2)   aridad: 3
+    paradigmaDocs(Name,Date,Pdocs2).                                            aridad: 3
+    constPdocs(Name,Date,Registrados,Logeados,Documentos,Pdocs2).               aridad: 6
+    getNombrePdocs([Nombre|_],Nombre).                                          aridad: 2
+    getFechaCreacionPdocs([_,Fecha,_,_,_],Fecha).                               aridad: 2
+    getRegistrados([_,_,Registrados|_],Registrados).                            aridad: 2
+    getLogeados([_,_,_,Logeado|_],Logeado).                                     aridad: 2
+    getDocumentos([_,_,_,_,ListaDocs],ListaDocs).                               aridad: 2
+    modificarDocs([NombrePdocs,FechaCreacion,Registrados|_],UpdateDocs,Pdocs2)  aridad: 3
 
 --------------------------------------------- Representacion ------------------------------------------
 El TDA ParadigmaDocs, representa la plataforma donde estan alojados los documentos y usuarios
@@ -99,21 +99,21 @@ modificarDocs([Nombre,Fecha,Registrados|_],UpdateDocs,[Nombre,Fecha,Registrados,
 
 /*-------------------------------------------TDA USER--------------------------------------------------
 Dominios:
-    Username,Pass,Logeado:                              String
-    Date:                                               Date
-    Pdocs:                                              ParadigmaDocs
-    Registrados, Logeados, Documentos, UpdateDocs       Estructura Lista
-
+    Username,Pass,Logeado:                                String
+    Date:                                                 Date
+    Pdocs2:                                               ParadigmaDocs
+    Registrados, Logeados, Documentos, UpdateDocs         Estructura Lista
+ 
 Predicados:
-    getUser([Username,_,_],Username).                     aridad: 2
-    getPass([_,Pass,_],Pass).                             aridad: 2
-    getFechaCreacionUser([_,_,Date],Date).                aridad: 2
-    getUserNames([[Username,Pass,Date]...],[Username...]).aridad: 2
-    getPasswords([[Username,Pass,Date]...],[Pass..]).     aridad: 2
-    getLogeado(Pdocs,Logeado).                            aridad: 2
-    registradoAntes(Pdocs,Username)                       aridad: 2
-    miembroPdocs(Pdocs,Usuario,Pass)                      aridad: 3
-    sesionActiva(Pdocs)                                   aridad: 1
+    getUser([Username,_,_],Username).                      aridad: 2
+    getPass([_,Pass,_],Pass).                              aridad: 2
+    getFechaCreacionUser([_,_,Date],Date).                 aridad: 2
+    getUserNames([[Username,Pass,Date]...],[Username...]). aridad: 2
+    getPasswords([[Username,Pass,Date]...],[Pass..]).      aridad: 2
+    getLogeado(Pdocs2,Logeado).                            aridad: 2
+    registradoAntes(Pdocs2,Username)                       aridad: 2
+    miembroPdocs(Pdocs2,Usuario,Pass)                      aridad: 3
+    sesionActiva(Pdocs2)                                   aridad: 1
 
 --------------------------------------------- Representacion ------------------------------------------
 El TDA User, representa al elemento "usuario" dentro de paradigmaDocs, su estructura es de la forma User XX Pass X Date (String X String X Date)
@@ -146,31 +146,32 @@ getPasswords([User|TUsername],[Pass|TPass]):-
   getPasswords(TUsername,TPass).
 
 % getLogeado: Predicado que extrae al usuario con sesión activa en paradigmadocs
-getLogeado(Pdocs,Logeado):-
-  getLogeados(Pdocs,[Logeado|_]).
+getLogeado(Pdocs2,Logeado):-
+  getLogeados(Pdocs2,[Logeado|_]).
 
 % setUsuario: Predicado que añade un usuario a los usuarios registrados de paradigmadocs
 setUsuario(Registrados,Usuario,Res):-
   append(Registrados,[Usuario],Res).
 
 % registrado Antes: Predicado que determina si un usuario se ha registrado antes
-registradoAntes(ParadigmaDocs,User):-
-  string(User),
+registradoAntes(ParadigmaDocs,Username):-
   getRegistrados(ParadigmaDocs,ListaRegistrados),
   getUserNames(ListaRegistrados,Usernames),
-  myMember(User,Usernames).
+  myMember(Username,Usernames).
 
 % miembroPdocs: Predicado que verifica si un usuario tiene la contraseña y el username para ser miembro de paradigmadocs
-miembroPdocs(Pdocs,Username,Pass):-
-  getRegistrados(Pdocs,Registrados),
+miembroPdocs(Pdocs2,Username,Pass):-
+  string(Username),
+  string(Pass),
+  getRegistrados(Pdocs2,Registrados),
   getUserNames(Registrados,Usernames),
   getPasswords(Registrados,Passwords),
   indexOf(Usernames,Username,Index),
   myNth0(Index,Passwords,Pass).
 
 % sesionActiva: Predicado que verifica cuando un usuario tiene sesion activa en paradigmaDocs, retornando true/false
-sesionActiva(Pdocs):-
-  getLogeados(Pdocs,Logeados),
+sesionActiva(Pdocs2):-
+  getLogeados(Pdocs2,Logeados),
   \+Logeados==[].
 
 /*-------------------------------------------TDA DOCUMENTO--------------------------------------------------
@@ -180,7 +181,7 @@ Dominios:
     Historial, Shares, IDLIST                           Estructura Lista
     DOCS:                                               Estructura Lista
     Date:                                               Date
-    Pdocs:                                              ParadigmaDocs
+    Pdocs2:                                             ParadigmaDocs
 
 Predicados:
     constDoc(Id,Autor,Titulo,Shares,Historial,DOC)      aridad: 6
@@ -189,8 +190,8 @@ Predicados:
     getTituloDoc(DOC,Titulo)                            aridad: 2
     getAccessesDoc(DOC,Shares)                          aridad: 2
     getHistorialDoc(DOC,Historial)                      aridad: 2
-    setId(Pdocs,Id)                                     aridad: 2
-    getDocumentById(Pdocs,Id,Docu)                      aridad: 3
+    setId(Pdocs2,Id)                                    aridad: 2
+    getDocumentById(Pdocs2,Id,Docu)                     aridad: 3
     getRestantes(DOCS,IDLIST,DOCS)                      aridad: 3
     getSharedDocuments(Username,DOCS,DOCS)              aridad: 3
     getMyDocs(Username,DOCS,DOCS)                       aridad: 3
@@ -198,7 +199,7 @@ Predicados:
     getDocsAcceso(Username,DOCS,DOCS)                   aridad: 3
     getIdDocCreados(Username,DOCS,DOCS)                 aridad: 3
     revokeAccesses(DOCS,DOCS)                           aridad: 2
-    revokeAllAccesses(PDocs,DOCS,DOCS)                  aridad: 3
+    revokeAllAccesses(Pdocs2,DOCS,DOCS)                 aridad: 3
     getIdsRestantes(DOCS,IDLIST,DOCS)                   aridad: 3
 
 --------------------------------------------- Representacion ------------------------------------------
@@ -223,8 +224,8 @@ getHistorialDoc([_,_,_,_,Historial],Historial).
 % Reglas:
 
 % setId: Predicado que coloca id correspondiente a un nuevo documento
-setId(Pdocs,Id):-
-  getDocumentos(Pdocs,Docs),
+setId(Pdocs2,Id):-
+  getDocumentos(Pdocs2,Docs),
   length(Docs,Id).
 
 % setDocumento: Predicado que añade un documento a paradigmadocs
@@ -232,8 +233,9 @@ setDocumento(Restantes,Documento,Docs):-
   append(Restantes,Documento,Docs).
 
 % getDocumentById: Predicado que obtiene un documento mediante su id 
-getDocumentById(Pdocs,Id,Docu):-
-  getDocumentos(Pdocs,Docs),
+getDocumentById(Pdocs2,Id,Docu):-
+  integer(Id),
+  getDocumentos(Pdocs2,Docs),
   getSubIndexElement(Docs,Id,Index),
   myNth0(Index,Docs,Docu).
 
@@ -287,12 +289,12 @@ revokeAccesses(Doc,UpdateDoc):-
 
 % revokeAllAccesses: Predicado que obtiene una lista de Id's de los documentos que se quieren revocar acceso y a cada uno de ellos les revoca el acceso, si es propietario(Autor) es el logeado
 revokeAllAccesses(_,[],[]):-!.
-revokeAllAccesses(Pdocs,[Id|T],[H1|T1]):-
-  getDocumentById(Pdocs,Id,Doc),
+revokeAllAccesses(Pdocs2,[Id|T],[H1|T1]):-
+  getDocumentById(Pdocs2,Id,Doc),
   getAutorDoc(Doc,Autor),
-  getLogeado(Pdocs,Autor),
+  getLogeado(Pdocs2,Autor),
   revokeAccesses(Doc,H1),
-  revokeAllAccesses(Pdocs,T,T1).
+  revokeAllAccesses(Pdocs2,T,T1).
 
 /*-------------------------------------------TDA VERSION---------------------------------------------------
 Dominios:
@@ -301,7 +303,7 @@ Dominios:
     Historial, Shares, IDLIST                                 Estructura Lista
     Date:                                                     Date
     Doc:                                                      Documento
-    Pdocs:                                                    ParadigmaDocs
+    Pdocs2:                                                   ParadigmaDocs
 
 Predicados:
     constVersion(Idvr,Fecha,Contenido,VERSION)                aridad: 4
@@ -340,6 +342,7 @@ getContenidoVersion([_,_,Contenido],Contenido).
 
 %getVersionById: Predicado que obtiene una version mediante su idVersion
 getVersionById(Historial,Id,Ver):-
+  integer(Id),
   getSubIndexElement(Historial,Id,Index),
   myNth0(Index,Historial,Ver).
 
@@ -372,9 +375,9 @@ Dominios:
     Permiso,Username,AccessString:                                    String
     Permisos,ListaUsuariosPermitidos,Accesses                         Estructura Lista
     Date:                                                             Date
-    PDocs:                                                            ParadigmaDocs
+    Pdocs2:                                                            ParadigmaDocs
 Predicados:
-    createAccesses(PDocs,Permisos,ListaUsuariosPermitidos,Accesses)   aridad: 4
+    createAccesses(Pdocs2,Permisos,ListaUsuariosPermitidos,Accesses)  aridad: 4
     isAccess(Permiso)                                                 aridad: 1
     isAccessList(Permisos)                                            aridad: 1
     isEditor(Username,Accesses)                                       aridad: 2
@@ -393,10 +396,10 @@ los usuarios deben estar previamente registrados para poder ser añadidos a esta
 Hechos*/
 % createAcccess: Predicado constructor de accesos, el cual recibe 2 listas ["W","R"] y ["U1""U2"], y construye permisos de la forma [["U1",["W","R"]],["U2",["W","R"]]]
 createAccesses(_,_,[],[]):-!.   % Base Case 1
-createAccesses(Sn1,Permisos,[User|TailUser],[[User,Permisos]|TF]):-
+createAccesses(Pdocs1,Permisos,[User|TailUser],[[User,Permisos]|TF]):-
   isAccessList(Permisos),
-  registradoAntes(Sn1,User),
-  createAccesses(Sn1,Permisos,TailUser,TF).
+  registradoAntes(Pdocs1,User),
+  createAccesses(Pdocs1,Permisos,TailUser,TF).
 
 % getUserPermiso: Predicado que obtiene el nombre del usuario que tiene el acceso
 getUserPermiso([Nombre,_],Nombre).
@@ -583,20 +586,20 @@ Dominios:
     DocumentId,NumberOfCharacters:                                                            Integer
     Documents,ListaPermisos,ListaUsernamesPermitidos:                                         Estructura Lista
     Fecha:                                                                                    Date
-    Sn1,Sn2:                                                                                  ParadigmaDocs
+    Pdocs1,Pdocs2:                                                                            ParadigmaDocs
 
 Predicados:
-    paradigmaDocsRegister(Sn1,Fecha,Username,Password,Sn2)                                    aridad: 5
-    paradigmaDocsLogin(Sn1,Username,Password,Sn2)                                             aridad: 4
-    paradigmaDocsCreate(Sn1, Fecha, Nombre, Contenido,Sn2)                                    aridad: 5
-    paradigmaDocsShare(Sn1,DocumentId,ListaPermisos,ListaUsernamesPermitidos,Sn2)             aridad: 5
-    paradigmaDocsAdd(Sn1,DocumentId,Fecha,ContenidoTexto,Sn2)                                 aridad: 5
-    paradigmaDocsRestoreVersion(Sn1,DocumentId,IdVersion,Sn2)                                 aridad: 4
-    paradigmaDocsToString(Sn1,PDocsString)                                                    aridad: 2
-    paradigmaDocsRevokeAllAccesses(Sn1,DocumentIds,Sn2)                                       aridad: 3
-    paradigmaDocsDelete(Sn1,DocumentId,Fecha,NumberOfCharacters,Sn2)                          aridad: 5
-    paradigmaDocsSearch(Sn1,String,Documents)                                                 aridad: 3
-    paradigmaDocsSearchAndReplace(Sn1,DocumentId,Text1,Fecha,Text2,Sn2)                       aridad: 6
+    paradigmaDocsRegister(Pdocs1,Fecha,Username,Password,Pdocs2)                              aridad: 5
+    paradigmaDocsLogin(Pdocs1,Username,Password,Pdocs2)                                       aridad: 4
+    paradigmaDocsCreate(Pdocs1, Fecha, Nombre, Contenido,Pdocs2)                              aridad: 5
+    paradigmaDocsShare(Pdocs1,DocumentId,ListaPermisos,ListaUsernamesPermitidos,Pdocs2)       aridad: 5
+    paradigmaDocsAdd(Pdocs1,DocumentId,Fecha,ContenidoTexto,Pdocs2)                           aridad: 5
+    paradigmaDocsRestoreVersion(Pdocs1,DocumentId,IdVersion,Pdocs2)                           aridad: 4
+    paradigmaDocsToString(Pdocs1,PDocsString)                                                 aridad: 2
+    paradigmaDocsRevokeAllAccesses(Pdocs1,DocumentIds,Pdocs2)                                 aridad: 3
+    paradigmaDocsDelete(Pdocs1,DocumentId,Fecha,NumberOfCharacters,Pdocs2)                    aridad: 5
+    paradigmaDocsSearch(Pdocs1,String,Documents)                                              aridad: 3
+    paradigmaDocsSearchAndReplace(Pdocs1,DocumentId,Text1,Fecha,Text2,Pdocs2)                 aridad: 6
 
 Metas:
   Metas Primarias: paradigmaDocsRegister, paradigmaDocsLogin, paradigmaDocsCreate, paradigmaDocsShare, paradigmaDocsAdd, paradigmaDocsRestoreVersion, 
@@ -612,67 +615,69 @@ Clausulas:
 Reglas:*/
 
 % ParadigmaDocsRegister: Predicado que permite a un usuario registrarse en paradigmaDocs
-% Dominio: Sn1, Fecha, Username, Password, Sn2
-paradigmaDocsRegister(Sn1,Fecha,Username,Password,Sn2):-
-  \+registradoAntes(Sn1,Username),
-  getNombrePdocs(Sn1,Nombre),
-  getFechaCreacionPdocs(Sn1,FechaCreacion),
-  getLogeados(Sn1,Logeados),
-  getDocumentos(Sn1,Docs),
-  getRegistrados(Sn1,Registrados),
+% Dominio: Pdocs1, Fecha, Username, Password, Pdocs2
+paradigmaDocsRegister(Pdocs1,Fecha,Username,Password,Pdocs2):-
+  \+registradoAntes(Pdocs1,Username),
+  getNombrePdocs(Pdocs1,Nombre),
+  getFechaCreacionPdocs(Pdocs1,FechaCreacion),
+  getLogeados(Pdocs1,Logeados),
+  getDocumentos(Pdocs1,Docs),
+  getRegistrados(Pdocs1,Registrados),
   constUser(Username,Password,Fecha,Usuario),
   setUsuario(Registrados,Usuario,UpdateRegistrados),
-  Sn2 = [Nombre,FechaCreacion,UpdateRegistrados,Logeados,Docs],!.
+  Pdocs2 = [Nombre,FechaCreacion,UpdateRegistrados,Logeados,Docs].
 
 % ParadigmaDocsLogin: Predicado que inicia sesion a un usuario registrado y le permite hacer cualquier operacion permitida
-% Dominio: Sn1, Fecha, Username, Password, Sn2
-paradigmaDocsLogin(Sn1,Username,Password,Sn2):-
-  \+sesionActiva(Sn1),
-  string(Username),
-  string(Password),
-  getNombrePdocs(Sn1,Nombre),
-  getFechaCreacionPdocs(Sn1,FechaCreacion),
-  getRegistrados(Sn1,Registrados),
-  getLogeados(Sn1,Logeados),
-  getDocumentos(Sn1,Docs),
-  miembroPdocs(Sn1,Username,Password),
+% Dominio: Pdocs1, Fecha, Username, Password, Pdocs2
+paradigmaDocsLogin(Pdocs1,Username,Password,Pdocs2):-
+  \+sesionActiva(Pdocs1),
+  getNombrePdocs(Pdocs1,Nombre),
+  getFechaCreacionPdocs(Pdocs1,FechaCreacion),
+  getRegistrados(Pdocs1,Registrados),
+  getLogeados(Pdocs1,Logeados),
+  getDocumentos(Pdocs1,Docs),
+  miembroPdocs(Pdocs1,Username,Password),
   setUsuario(Logeados,Username,UpdateLogeados),
-  Sn2 = [Nombre,FechaCreacion,Registrados,UpdateLogeados,Docs].
+  Pdocs2 = [Nombre,FechaCreacion,Registrados,UpdateLogeados,Docs].
+
 % ParadigmaDocsCreate: Predicado que permite al usuario con sesion activa crear un nuevo documento
-% Dominio: Sn1, Fecha, Nombre, Contenido, Sn2
-paradigmaDocsCreate(Sn1, Fecha, Nombre, Contenido,Sn2):-
-  string(Nombre),string(Contenido),
-  sesionActiva(Sn1),    % Si existe sesion activa se saca al usuario
-  getDocumentos(Sn1,Docs),
-  getLogeado(Sn1,Autor),
-  setId(Sn1,Id),
+% Dominio: Pdocs1, Fecha, Nombre, Contenido, Pdocs2
+paradigmaDocsCreate(Pdocs1, Fecha, Nombre, Contenido,Pdocs2):-
+  string(Nombre),
+  string(Contenido),
+  sesionActiva(Pdocs1),    % Si existe sesion activa se saca al usuario
+  getDocumentos(Pdocs1,Docs),
+  getLogeado(Pdocs1,Autor),
+  setId(Pdocs1,Id),
   constVersion(-1,Fecha,Contenido,Version),
   constDoc(Id,Autor,Nombre,[[Autor,["W","C","R","S"]]],[Version],Doc), % al autor del documento automaticamente se le añade un permiso con todos los accesos
   setDocumento(Docs,Doc,UpdateDocs),
-  modificarDocs(Sn1,UpdateDocs,Sn2).
+  modificarDocs(Pdocs1,UpdateDocs,Pdocs2).
+
 % ParadigmaDocsShare: Predicado que permite al usuario con sesion activa, compartir un documento con otros usuarios registrados en paradigmaDocs
-% Dominio: Sn1, DocumentId, ListaPermisos, ListaUsernamesPermitidos, Sn2
-paradigmaDocsShare(Sn1,DocumentId,ListaPermisos,ListaUsernamesPermitidos,Sn2):-
-  sesionActiva(Sn1),
+% Dominio: Pdocs1, DocumentId, ListaPermisos, ListaUsernamesPermitidos, Pdocs2
+paradigmaDocsShare(Pdocs1,DocumentId,ListaPermisos,ListaUsernamesPermitidos,Pdocs2):-
+  sesionActiva(Pdocs1),
   ListaPermisos \== [],
   ListaUsernamesPermitidos \== [],
-  getDocumentos(Sn1,Docs),
-  getDocumentById(Sn1,DocumentId,[_,Autor,TituloDoc,OldAcceses,Historial]),
+  getDocumentos(Pdocs1,Docs),
+  getDocumentById(Pdocs1,DocumentId,[_,Autor,TituloDoc,OldAcceses,Historial]),
   filtraAccesses(ListaUsernamesPermitidos,OldAcceses,FilteredAccesses),
-  createAccesses(Sn1,ListaPermisos,ListaUsernamesPermitidos,Accesses),
+  createAccesses(Pdocs1,ListaPermisos,ListaUsernamesPermitidos,Accesses),
   setAccess(FilteredAccesses,Accesses,NewAccesses),
   constDoc(DocumentId,Autor,TituloDoc,NewAccesses,Historial,NuevoDoc),
   getRestantes(DocumentId,Docs,Restantes),
   setDocumento(Restantes,NuevoDoc,UpdateDocs),
-  modificarDocs(Sn1,UpdateDocs,Sn2).
+  modificarDocs(Pdocs1,UpdateDocs,Pdocs2).
+
 % ParadigmaDocsAdd: Predicado que permite al usuario con sesion activa añadir texto en la sesion activa de un documento, pasando esta actualizacion como sesion activa
-% Dominio: Sn1, DocumentId, Fecha, ContenidoTexto, Sn2
-paradigmaDocsAdd(Sn1,DocumentId,Fecha,ContenidoTexto,Sn2):-
-  sesionActiva(Sn1),
+% Dominio: Pdocs1, DocumentId, Fecha, ContenidoTexto, Pdocs2
+paradigmaDocsAdd(Pdocs1,DocumentId,Fecha,ContenidoTexto,Pdocs2):-
+  sesionActiva(Pdocs1),
   string(ContenidoTexto),
-  getDocumentos(Sn1,Docs),
-  getLogeado(Sn1,Logeado),
-  getDocumentById(Sn1,DocumentId,[Id,Autor,TituloDoc,Accesses,Historial]),
+  getDocumentos(Pdocs1,Docs),
+  getLogeado(Pdocs1,Logeado),
+  getDocumentById(Pdocs1,DocumentId,[Id,Autor,TituloDoc,Accesses,Historial]),
   isEditor(Logeado,Accesses),
   getActiveVersion(Historial,[IdVersion,_,ContenidoVersion]),
   string_concat(ContenidoVersion, ContenidoTexto, NuevoContenido),
@@ -681,30 +686,30 @@ paradigmaDocsAdd(Sn1,DocumentId,Fecha,ContenidoTexto,Sn2):-
   constDoc(Id,Autor,TituloDoc,Accesses,NuevoHistorial,NuevoDoc),
   getRestantes(DocumentId,Docs,RestantesDoc),
   setDocumento(RestantesDoc,NuevoDoc,UpdateDocs),
-  modificarDocs(Sn1,UpdateDocs,Sn2).
+  modificarDocs(Pdocs1,UpdateDocs,Pdocs2).
 
 % ParadigmaDocRestoreVersion: Predicado que permite al usuario con sesion activa, colocar como version activa una version anterior, registrada en el historial
-% Dominio: Sn1, DocumentId, IdVersion, Sn2
-paradigmaDocsRestoreVersion(Sn1,DocumentId,IdVersion,Sn2):-
-  sesionActiva(Sn1),
-  getLogeado(Sn1,Logeado),
-  getDocumentos(Sn1,Docs),
-  getDocumentById(Sn1,DocumentId,[Id,Logeado,Titulo,Accesses,Historial]),
+% Dominio: Pdocs1, DocumentId, IdVersion, Pdocs2
+paradigmaDocsRestoreVersion(Pdocs1,DocumentId,IdVersion,Pdocs2):-
+  sesionActiva(Pdocs1),
+  getLogeado(Pdocs1,Logeado),
+  getDocumentos(Pdocs1,Docs),
+  getDocumentById(Pdocs1,DocumentId,[Id,Logeado,Titulo,Accesses,Historial]),
   getVersionById(Historial,IdVersion,Restaurada),
   getRestantes(IdVersion,Historial,VerRestantes),
   addHead(Restaurada,VerRestantes,NuevoHistorial),
   constDoc(Id,Logeado,Titulo,Accesses,NuevoHistorial,NuevoDoc),
   getRestantes(DocumentId,Docs,RestantesDoc),
   setDocumento(RestantesDoc,NuevoDoc,UpdateDocs),
-  modificarDocs(Sn1,UpdateDocs,Sn2).
+  modificarDocs(Pdocs1,UpdateDocs,Pdocs2).
 
 % ParadigmaDocsToString: Predicado que muestra informacion de paradigmaDocs en formato string, para que sea entendible por el usuario
-% Dominio: Sn1, PDocsString
+% Dominio: Pdocs1, PDocsString
 % Version 1: Cuando se muestra información todos los documentos que tiene acceso un usuario logeado
-paradigmaDocsToString(Sn1,PDocsString):-
-  sesionActiva(Sn1),
-  getLogeado(Sn1,Logeado),
-  getDocumentos(Sn1,Docs),
+paradigmaDocsToString(Pdocs1,PDocsString):-
+  sesionActiva(Pdocs1),
+  getLogeado(Pdocs1,Logeado),
+  getDocumentos(Pdocs1,Docs),
   getDocsCreados(Logeado,Docs,DocsCreados),
   getDocsAcceso(Logeado,Docs,DocsAcceso),
   docsToString(DocsCreados,DocStringCreados),atomics_to_string(DocStringCreados,DocStrings1),
@@ -712,12 +717,12 @@ paradigmaDocsToString(Sn1,PDocsString):-
   atomics_to_string(["\n* * * * * * * * *  ",Logeado,"  * * * * * * * * *  \n\n*********** Es Propietario de ***********",
   DocStrings1,"\n************ Tiene acceso a *************\n",DocStrings2],PDocsString),!.
 % Version 2: Se muestra toda la información de la plataforma
-paradigmaDocsToString(Sn1,PDocsString):-
-  \+sesionActiva(Sn1),
-  getNombrePdocs(Sn1,Nombre),
-  getFechaCreacionPdocs(Sn1,FechaCreacion),
-  getRegistrados(Sn1,Registrados),
-  getDocumentos(Sn1,Docs),
+paradigmaDocsToString(Pdocs1,PDocsString):-
+  \+sesionActiva(Pdocs1),
+  getNombrePdocs(Pdocs1,Nombre),
+  getFechaCreacionPdocs(Pdocs1,FechaCreacion),
+  getRegistrados(Pdocs1,Registrados),
+  getDocumentos(Pdocs1,Docs),
   dateString(FechaCreacion,DateString),
   registradosToString(Registrados,RegiStringList),atomics_to_string(RegiStringList,RegiString),
   docsToString(Docs,DocString),atomics_to_string(DocString,DocStrings),
@@ -725,36 +730,36 @@ paradigmaDocsToString(Sn1,PDocsString):-
   "******** Usuarios Registrados ******** ",RegiString,"\n","************* Documentos ************ ",DocStrings],PDocsString),!.
 
 % ParadigmaDocsRevokeAllAccesses: Predicado que permite al usuario con sesion activa, eliminar todos los permisos de una lista de Ids a los que el usuario es autor, si se ingresa [], se elimina todos los accesos a los documentos creados
-% Dominio: Sn1, DocumentIds, Sn2
+% Dominio: Pdocs1, DocumentIds, Pdocs2
 % Version 1: (paradigmaDocsRevokeAllAccesses) cuando la lista de IdsDocumentos no es [], se revocan los documentos seleccionados
-paradigmaDocsRevokeAllAccesses(Sn1,DocumentIds,Sn2):-
-  sesionActiva(Sn1),
+paradigmaDocsRevokeAllAccesses(Pdocs1,DocumentIds,Pdocs2):-
+  sesionActiva(Pdocs1),
   DocumentIds \== [],
-  getDocumentos(Sn1,Docs),
-  revokeAllAccesses(Sn1,DocumentIds,RevokedDocuments),
+  getDocumentos(Pdocs1,Docs),
+  revokeAllAccesses(Pdocs1,DocumentIds,RevokedDocuments),
   getIdsRestantes(Docs,DocumentIds,RestantesDoc),
   setDocumento(RestantesDoc,RevokedDocuments,UpdateDocs),
-  modificarDocs(Sn1,UpdateDocs,Sn2),!.
+  modificarDocs(Pdocs1,UpdateDocs,Pdocs2),!.
 % Version 2: (paradigmaDocsRevokeAllAccesses) cuando la lista de IdsDocumentos es [], se revocan todos los documentos donde el usuario es autor
-paradigmaDocsRevokeAllAccesses(Sn1,[],Sn2):-
-  sesionActiva(Sn1),
-  getLogeado(Sn1,Logeado),
-  getDocumentos(Sn1,Docs),
+paradigmaDocsRevokeAllAccesses(Pdocs1,[],Pdocs2):-
+  sesionActiva(Pdocs1),
+  getLogeado(Pdocs1,Logeado),
+  getDocumentos(Pdocs1,Docs),
   getDocsCreados(Logeado,Docs,DocsCreados),
   getIdDocCreados(DocsCreados,DocumentIds),
-  revokeAllAccesses(Sn1,DocumentIds,RevokedDocuments),
+  revokeAllAccesses(Pdocs1,DocumentIds,RevokedDocuments),
   getIdsRestantes(Docs,DocumentIds,RestantesDoc),
   setDocumento(RestantesDoc,RevokedDocuments,UpdateDocs),
-  modificarDocs(Sn1,UpdateDocs,Sn2).
+  modificarDocs(Pdocs1,UpdateDocs,Pdocs2).
 
 % ParadigmaDocsDelete: Predicado que permite al usuario con sesion activa, eliminar los ultimos "n" caracteres del contenido de la version activa, si el "n" a eliminar es mayor a largo, se elimina todo la cadena quedando ""
-% Dominio: Sn1, DocumentId, Fecha, NumberOfCharacters, Sn2
-paradigmaDocsDelete(Sn1,DocumentId,Fecha,NumberOfCharacters,Sn2):-
-  sesionActiva(Sn1),
+% Dominio: Pdocs1, DocumentId, Fecha, NumberOfCharacters, Pdocs2
+paradigmaDocsDelete(Pdocs1,DocumentId,Fecha,NumberOfCharacters,Pdocs2):-
+  sesionActiva(Pdocs1),
   integer(NumberOfCharacters),
-  getDocumentos(Sn1,Docs),
-  getLogeado(Sn1,Logeado),
-  getDocumentById(Sn1,DocumentId,[Id,Autor,TituloDoc,Accesses,Historial]),    % get the document
+  getDocumentos(Pdocs1,Docs),
+  getLogeado(Pdocs1,Logeado),
+  getDocumentById(Pdocs1,DocumentId,[Id,Autor,TituloDoc,Accesses,Historial]),    % get the document
   isEditor(Logeado,Accesses),
   getActiveVersion(Historial,[IdVersion,_,ContenidoVersion]),  % get Active version
   deleteLast(ContenidoVersion,NumberOfCharacters,NuevoContenido),
@@ -763,27 +768,30 @@ paradigmaDocsDelete(Sn1,DocumentId,Fecha,NumberOfCharacters,Sn2):-
   constDoc(Id,Autor,TituloDoc,Accesses,NuevoHistorial,NuevoDoc),
   getRestantes(DocumentId,Docs,RestantesDoc),
   setDocumento(RestantesDoc,NuevoDoc,UpdateDocs),
-  modificarDocs(Sn1,UpdateDocs,Sn2).
+  modificarDocs(Pdocs1,UpdateDocs,Pdocs2).
+
 % ParadigmaDocsSearch: Predicado que permite al usuario con sesion activa buscar texto en los documentos en los todos los documentos a los que el usaurio logeado  tiene acceso, retorna los documentos donde hay coincidencias, si no las hay retorna []
-% Dominio: Sn1, String, Documents, Sn2
-paradigmaDocsSearch(Sn1,String,Documents):-
-  sesionActiva(Sn1),
-  getLogeado(Sn1,Logeado),
-  getDocumentos(Sn1,Docs),
+% Dominio: Pdocs1, String, Documents, Pdocs2
+paradigmaDocsSearch(Pdocs1,SearchText,Documents):-
+  string(SearchText),
+  sesionActiva(Pdocs1),
+  getLogeado(Pdocs1,Logeado),
+  getDocumentos(Pdocs1,Docs),
   getDocsCreados(Logeado,Docs,DocsCreados),
   getDocsAcceso(Logeado,Docs,DocsAcceso),
   setDocumento(DocsCreados,DocsAcceso,AllDocs),
-  getDocCoincidencias(String,AllDocs,Documents).
+  getDocCoincidencias(SearchText,AllDocs,Documents).
+
 % ParadigmaDocsSearchAndReplace: Predicado que permite al usuario buscar texto en la version activa de un documento mediante su "id" y reemplaza las ocurrencias por otro texto ingrado
-% Dominio: Sn1, DocumentIds, String, Fecha, String, Sn2
+% Dominio: Pdocs1, DocumentIds, String, Fecha, String, Pdocs2
 % Version 1: (paradigmaDocsSearchAndReplace) Cuando el texto buscado se encuetra, se duelve paradigmaDocs con el texto reemplazado
-paradigmaDocsSearchAndReplace(Sn1,DocumentId,Text1,Text2,Fecha,Sn2):-
-  sesionActiva(Sn1),
+paradigmaDocsSearchAndReplace(Pdocs1,DocumentId,Text1,Text2,Fecha,Pdocs2):-
+  sesionActiva(Pdocs1),
   string(Text1),
   string(Text2),
-  getLogeado(Sn1,Logeado),
-  getDocumentos(Sn1,Docs),
-  getDocumentById(Sn1,DocumentId,[Id,Autor,TituloDoc,Accesses,Historial]),    % get the document
+  getLogeado(Pdocs1,Logeado),
+  getDocumentos(Pdocs1,Docs),
+  getDocumentById(Pdocs1,DocumentId,[Id,Autor,TituloDoc,Accesses,Historial]),    % get the document
   isEditor(Logeado,Accesses),
   getActiveVersion(Historial,[IdVersion,_,ContenidoVersion]),  % get Active version
   searchSubstring(ContenidoVersion,Text1),
@@ -793,25 +801,25 @@ paradigmaDocsSearchAndReplace(Sn1,DocumentId,Text1,Text2,Fecha,Sn2):-
   constDoc(Id,Autor,TituloDoc,Accesses,NuevoHistorial,NuevoDoc),
   getRestantes(DocumentId,Docs,RestantesDoc),
   setDocumento(RestantesDoc,NuevoDoc,UpdateDocs),
-  modificarDocs(Sn1,UpdateDocs,Sn2),!.
-% Version 2: (paradigmaDocsSearchAndReplace) Cuando no se encuentra el texto buscado, se envia un mensaje mediante el predicado write y todo el documento de entrada
-paradigmaDocsSearchAndReplace(Sn1,DocumentId,Text1,Text2,_,_):-
-  sesionActiva(Sn1),
+  modificarDocs(Pdocs1,UpdateDocs,Pdocs2),!.
+% Version 2: (paradigmaDocsSearchAndReplace) Cuando no se encuentra el texto buscado, se envia un mensaje mediante el predicado write
+paradigmaDocsSearchAndReplace(Pdocs1,DocumentId,Text1,Text2,_,_):-
+  sesionActiva(Pdocs1),
   string(Text1),
   string(Text2),
-  getLogeado(Sn1,Logeado),
-  getDocumentById(Sn1,DocumentId,Doc),
+  getLogeado(Pdocs1,Logeado),
+  getDocumentById(Pdocs1,DocumentId,Doc),
   getAccessesDoc(Doc,Accesses),
   getHistorialDoc(Doc,Historial),
   isEditor(Logeado,Accesses),
   getActiveVersion(Historial,[_,_,ContenidoVersion]),
   \+searchSubstring(ContenidoVersion,Text1),
-  docsToString([Doc],StringDoc),
-  atomics_to_string(StringDoc,StringsDoc),
-  write("\n>>> No se encuentran coicidencias en el documento, se retorna el documento original <<<\n"),
-  write(StringsDoc).
+  write("\n>>> No se encuentran coicidencias en el documento<<<\n\n").  % Mensaje avisando que no hay coincidencias en el documento
+
 
 /*> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > EJEMPLOS < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < 
+
+-> Acontinuación se muestran ejemplos de cada predicado / Meta Principal, los cuales constan de 2 partes : Ejemplos exitosos y ejemplos fallidos que retornan (false)
 
 > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >  Register < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < 
 
