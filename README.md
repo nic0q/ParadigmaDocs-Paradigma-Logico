@@ -12,6 +12,19 @@ Para la correcta ejecución, el proyecto se compone de un archivo llamado **main
 El presente proyecto pertence a una saga de 3 paradigmas (Funcional en Scheme | Lógico en Prolog | Orientado a Objetos en Java)
 La plataforma ParadigmaDocs es una plataforma de ofimática la cual permite añadir documentos, compartir documento, quitar permisos a un documento editar texto (añadir y eliminar) restaurar versiones de un documento, buscar caracteres en las versiones, buscar y reemplazar caracteres.
 
+### Predicados funcionales en la plataforma (Para más detalles revisar el informe 😀
+✅ paradigmaDocsRegister
+✅ paradigmaDocsLogin
+✅ paradigmaDocsCreate
+✅ paradigmaDocsShare
+✅ paradigmaDocsAdd 
+✅ paradigmaDocsRestoreVersion
+✅ paradigmaDocsToString
+✅ paradigmaDocsRevokeAllAccesses 
+✅ paradigmaDocsSearch
+✅ paradigmaDocsDelete
+✅ paradigmaDocsSearchAndReplace
+
 ```cpp
 // 1) Ubicarse en la ruta donde se encuentra el archivo
 // 2) Realice una consulta en este, de la forma
