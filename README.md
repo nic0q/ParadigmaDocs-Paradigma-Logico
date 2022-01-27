@@ -33,6 +33,6 @@ set_prolog_flag(answer_write_options,[max_depth(0)]).
 **Calificacion Docente (Escala del 1 al 7)**
 
 Código: 7
-Informe: 6.6
+Informe: 4.4
 
 Made with <3 by Nícolas
